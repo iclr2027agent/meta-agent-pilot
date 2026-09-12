@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# External clones — reproducible via setup commands, not source we authored.
+# See swe_agent_baseline/README or the SWE-agent baseline build spec for the
+# exact clone/install commands.
+swe_agent_baseline/SWE-agent/
+swe_agent_baseline/venv/
+swebench_pilot/django_repo/
+
+# OS / editor
+.DS_Store
+.idea/
+
+# Results and logs — regenerable by re-running the harness against the
+# same tasks/tickets; not source. Re-running costs real API/compute time,
+# but nothing here is hand-authored or otherwise irreproducible.
+/results/
+/logs/
+swebench_pilot/logs/
+

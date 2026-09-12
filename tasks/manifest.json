@@ -1,0 +1,18 @@
+{
+  "ticket_01_truncate": "tests/test_stringutils.py",
+  "ticket_02_is_prime": "tests/test_mathutils.py",
+  "ticket_03_dedupe": "tests/test_listutils.py",
+  "ticket_04_days_between": "tests/test_dateutils.py",
+  "ticket_05_lru_cache": "tests/test_cache.py",
+  "ticket_06_moving_average": "tests/test_statutils.py",
+  "ticket_07_discounts": "tests/test_discounts.py",
+  "ticket_08_progress": "tests/test_progress.py",
+  "ticket_09_inventory": "tests/test_inventory.py",
+  "ticket_10_username": "tests/test_username.py",
+  "ticket_11_cart": "tests/test_cart.py",
+  "ticket_12_shares": "tests/test_shares.py",
+  "ticket_13_eligibility": "tests/test_eligibility.py",
+  "ticket_14_volume": "tests/test_volume.py",
+  "ticket_15_timeout": "tests/test_timeout.py",
+  "ticket_16_allocation": "tests/test_allocation.py"
+}
