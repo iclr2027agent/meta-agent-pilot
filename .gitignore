@@ -9,6 +9,7 @@ __pycache__/
 swe_agent_baseline/SWE-agent/
 swe_agent_baseline/venv/
 swebench_pilot/django_repo/
+swebench_expansion/repos/
 
 # OS / editor
 .DS_Store
@@ -20,4 +21,8 @@ swebench_pilot/django_repo/
 /results/
 /logs/
 swebench_pilot/logs/
+swebench_expansion/logs/
+swebench_expansion/smoke_test/
+swebench_expansion/full_run.log
 
+.env.swebench_expansion
