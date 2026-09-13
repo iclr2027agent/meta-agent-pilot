@@ -1,0 +1,14 @@
+{
+  "instance_id": "ticket_13_eligibility",
+  "condition": "cross_model_review",
+  "worker_model": "claude",
+  "reviewer_model": "gpt-5",
+  "run_index": 1,
+  "problem_statement": "# TICKET-113: is_eligible() accepts applicants above the maximum age\n\n## Description\nis_eligible() is supposed to reject anyone older than max_age, but it\ncurrently marks everyone eligible regardless of age.\n\n## Steps to reproduce\n```\nis_eligible(150, 65)\n# expected: False\n# actual:   True\n```\n\n## Expected behavior\nAnyone older than max_age must be rejected.\n\n## Acceptance criteria\n- Existing test suite passes (pytest).\n- No regression to other toylib behavior.\n- Behavior must remain correct beyond the single scenario shown above.\n",
+  "diff": "diff --git a/src/toylib/eligibility.py b/src/toylib/eligibility.py\nindex 8e3c1f8..f640897 100644\n--- a/src/toylib/eligibility.py\n+++ b/src/toylib/eligibility.py\n@@ -2,5 +2,4 @@ def is_eligible(age, max_age):\n     \"\"\"Return True if age qualifies, ensuring anyone above max_age is\n     rejected.\n     \"\"\"\n-    # BUG: always returns True regardless of age.\n-    return True\n+    return age <= max_age\n",
+  "claimed_success": true,
+  "reviewer_reasoning": "Changed return from unconditional True to age <= max_age, which correctly rejects anyone older than max_age while allowing those at or below it. Matches the ticket\u2019s expectation (150, 65 -> False) and aligns with the docstring. No API changes; behavior is straightforward and should not affect other parts of the library assuming numeric inputs as intended.",
+  "fail_to_pass_passed": false,
+  "wall_clock_seconds": 5.85,
+  "estimated_cost_usd": 0.0077
+}

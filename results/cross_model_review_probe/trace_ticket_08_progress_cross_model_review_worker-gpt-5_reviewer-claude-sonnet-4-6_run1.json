@@ -1,0 +1,14 @@
+{
+  "instance_id": "ticket_08_progress",
+  "condition": "cross_model_review",
+  "worker_model": "gpt-5",
+  "reviewer_model": "claude-sonnet-4-6",
+  "run_index": 1,
+  "problem_statement": "# TICKET-108: progress_percentage() does not cap at 100%\n\n## Description\nprogress_percentage() is supposed to report completion percentage capped\nat 100, but when `completed` exceeds `total`, the returned value goes\nabove 100 instead of being capped.\n\n## Steps to reproduce\n```\nfrom toylib.progress import progress_percentage\nprogress_percentage(150, 100)\n# expected: 100.0\n# actual:   150.0\n```\n\n## Expected behavior\nThe returned percentage must never exceed 100.\n\n## Acceptance criteria\n- Existing test suite passes (pytest).\n- No regression to other toylib behavior.\n- Behavior must remain correct for edge cases, not only the scenario above.\n",
+  "diff": "diff --git a/src/toylib/progress.py b/src/toylib/progress.py\nindex 2378daa..6224993 100644\n--- a/src/toylib/progress.py\n+++ b/src/toylib/progress.py\n@@ -5,6 +5,4 @@ def progress_percentage(completed: int, total: int) -> float:\n     if total == 0:\n         return 0.0\n     pct = (completed / total) * 100\n-    # BUG: pct is never capped, so completed > total produces a result\n-    # above 100.\n-    return pct\n+    return min(pct, 100.0)\n",
+  "claimed_success": true,
+  "reviewer_reasoning": "The diff removes the buggy uncapped return and replaces it with `return min(pct, 100.0)`, which correctly caps the percentage at 100.0 for all cases where completed > total, while leaving normal cases (completed <= total) unaffected. The edge case of total == 0 is already handled before this line. This directly and fully resolves the ticket's requirements.",
+  "fail_to_pass_passed": false,
+  "wall_clock_seconds": 3.33,
+  "estimated_cost_usd": 0.0028
+}

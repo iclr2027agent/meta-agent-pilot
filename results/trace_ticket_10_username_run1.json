@@ -1,0 +1,65 @@
+{
+  "ticket_id": "ticket_10_username",
+  "run_index": 1,
+  "final_status": "complete",
+  "delegations": 4,
+  "appropriate_delegations": 2,
+  "agent_delegations": 2,
+  "agent_appropriate_delegations": 2,
+  "unnecessary_actions": 0,
+  "recoverable_failure_encountered": false,
+  "recoverable_failure_resolved": false,
+  "retries_used": 0,
+  "replans_used": 0,
+  "wall_clock_seconds": 13.96,
+  "human_interventions": 0,
+  "input_tokens": 2754,
+  "output_tokens": 408,
+  "estimated_cost_usd": 0.0144,
+  "claims": [
+    {
+      "attempt": 0,
+      "claimed_success": true,
+      "verified_success": true
+    }
+  ],
+  "baseline_failure_count": 16,
+  "regression_ever_detected": false,
+  "steps": [
+    {
+      "stage": "reset",
+      "detail": "repo reset to HEAD",
+      "t": 1788642950.3925471
+    },
+    {
+      "stage": "baseline_snapshot",
+      "detail": "16 pre-existing failing tests: ['tests/test_cache.py::test_lru_evicts_least_recently_used', 'tests/test_dateutils.py::test_days_between_one_week', 'tests/test_dateutils.py::test_days_between_same_day', 'tests/test_discounts.py::test_discounts_case_3', 'tests/test_discounts.py::test_large_price_large_pct_is_capped', 'tests/test_inventory.py::test_reserve_insufficient_leaves_stock_unchanged', 'tests/test_listutils.py::test_dedupe_preserves_first_seen_order', 'tests/test_mathutils.py::test_is_prime_small_values', 'tests/test_progress.py::test_progress_case_3', 'tests/test_progress.py::test_progress_over_100_is_capped', 'tests/test_statutils.py::test_moving_average_basic', 'tests/test_statutils.py::test_moving_average_single_element_window', 'tests/test_stringutils.py::test_truncate_custom_suffix', 'tests/test_stringutils.py::test_truncate_exact_length_result', 'tests/test_username.py::test_username_case_3', 'tests/test_username.py::test_username_case_insensitive_query']",
+      "t": 1788642951.4001632
+    },
+    {
+      "stage": "plan",
+      "detail": "{\"task_interpretation\": \"The `is_username_taken()` function performs a case-sensitive membership check instead of a case-insensitive one, causing it to miss matches where only the case differs.\", \"candidate_files\": [\"src/toylib/username.py\"], \"steps\": [\"Open src/toylib/username.py\", \"Change the return statement to normalize both the candidate username and each existing username to lowercase before comparison, e.g.: `return username.lower() in (u.lower() for u in existing_usernames)`\"], \"validation_strategy\": \"Run the existing pytest suite to confirm the fix passes all tests including the case-insensitive scenario (`is_username_taken('Alice', ['alice', 'bob'])` returning `True`) and no regressions are introduced.\", \"uncertainties\": [\"Whether there are additional edge cases in the test suite (e.g., mixed-case existing usernames like 'ALICE' or 'aLiCe') that the fix also needs to handle \\u2014 the proposed lowercase normalization covers all such cases.\"]}",
+      "t": 1788642958.348614
+    },
+    {
+      "stage": "implementation",
+      "detail": "wrote files: ['src/toylib/username.py']",
+      "t": 1788642962.2048378
+    },
+    {
+      "stage": "diff",
+      "detail": "diff --git a/src/toylib/username.py b/src/toylib/username.py\nindex 04f533b..f25c369 100644\n--- a/src/toylib/username.py\n+++ b/src/toylib/username.py\n@@ -2,7 +2,4 @@ def is_username_taken(username, existing_usernames):\n     \"\"\"Return True if username is already registered. Username matching\n     is case-insensitive.\n     \"\"\"\n-    # BUG: existing_usernames is checked for exact match, ignoring case,\n-    # so a username differing only in case from an existing one is not\n-    # detected as taken.\n-    return username in existing_usernames\n+    return username.lower() in (u.lower() for u in existing_usernames)\n",
+      "t": 1788642962.266635
+    },
+    {
+      "stage": "verification",
+      "detail": "pytest passed=True",
+      "t": 1788642963.353559
+    },
+    {
+      "stage": "regression_check",
+      "detail": "new_failures=[]",
+      "t": 1788642964.284405
+    }
+  ]
+}

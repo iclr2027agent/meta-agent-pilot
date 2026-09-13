@@ -1,0 +1,14 @@
+{
+  "instance_id": "ticket_08_progress",
+  "condition": "evidence_level_1",
+  "model": "gpt-5",
+  "run_index": 1,
+  "problem_statement": "# TICKET-108: progress_percentage() does not cap at 100%\n\n## Description\nprogress_percentage() is supposed to report completion percentage capped\nat 100, but when `completed` exceeds `total`, the returned value goes\nabove 100 instead of being capped.\n\n## Steps to reproduce\n```\nfrom toylib.progress import progress_percentage\nprogress_percentage(150, 100)\n# expected: 100.0\n# actual:   150.0\n```\n\n## Expected behavior\nThe returned percentage must never exceed 100.\n\n## Acceptance criteria\n- Existing test suite passes (pytest).\n- No regression to other toylib behavior.\n- Behavior must remain correct for edge cases, not only the scenario above.\n",
+  "diff": "diff --git a/src/toylib/progress.py b/src/toylib/progress.py\nindex 2378daa..6224993 100644\n--- a/src/toylib/progress.py\n+++ b/src/toylib/progress.py\n@@ -5,6 +5,4 @@ def progress_percentage(completed: int, total: int) -> float:\n     if total == 0:\n         return 0.0\n     pct = (completed / total) * 100\n-    # BUG: pct is never capped, so completed > total produces a result\n-    # above 100.\n-    return pct\n+    return min(pct, 100.0)\n",
+  "evidence_shown": "The test suite reported: FAILURE (1 failed, 2 passed)",
+  "claimed_success": false,
+  "reviewer_reasoning": "The change caps values above 100 by using min(pct, 100.0), which addresses the primary symptom, but the test suite still reports 1 failure. This suggests unhandled edge cases remain (e.g., negative completed leading to negative percentages, or handling of nonpositive totals beyond zero). The acceptance criteria require correct behavior for edge cases and a fully passing test suite, which this patch does not achieve. Clamping to [0.0, 100.0] and clearly handling nonpositive totals is likely needed.",
+  "fail_to_pass_passed": false,
+  "wall_clock_seconds": 8.08,
+  "estimated_cost_usd": 0.0101
+}

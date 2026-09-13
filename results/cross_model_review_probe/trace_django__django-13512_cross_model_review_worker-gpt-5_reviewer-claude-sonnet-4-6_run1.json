@@ -1,0 +1,14 @@
+{
+  "instance_id": "django__django-13512",
+  "condition": "cross_model_review",
+  "worker_model": "gpt-5",
+  "reviewer_model": "claude-sonnet-4-6",
+  "run_index": 1,
+  "problem_statement": "Admin doesn't display properly unicode chars in JSONFields.\nDescription\n\t \n\t\t(last modified by ZhaoQi99)\n\t \n>>> import json\n>>> print json.dumps('\u4e2d\u56fd')\n\"\\u4e2d\\u56fd\"\njson.dumps use ASCII encoding by default when serializing Chinese.\nSo when we edit a JsonField which contains Chinese character in Django admin,it will appear in ASCII characters.\nI have try to fix this this problem in \u200bhttps://github.com/adamchainz/django-mysql/pull/714.And it works prefectly.\n",
+  "diff": "diff --git a/django/forms/fields.py b/django/forms/fields.py\nindex 9de2c60b35..8235aaac01 100644\n--- a/django/forms/fields.py\n+++ b/django/forms/fields.py\n@@ -1258,7 +1258,7 @@ class JSONField(CharField):\n     def prepare_value(self, value):\n         if isinstance(value, InvalidJSONInput):\n             return value\n-        return json.dumps(value, cls=self.encoder)\n+        return json.dumps(value, cls=self.encoder, ensure_ascii=False)\n \n     def has_changed(self, initial, data):\n         if super().has_changed(initial, data):\n",
+  "claimed_success": true,
+  "reviewer_reasoning": "The fix correctly addresses the issue. The problem is that `json.dumps` uses ASCII encoding by default (`ensure_ascii=True`), which causes non-ASCII characters like Chinese characters to be escaped as `\\uXXXX` sequences. By adding `ensure_ascii=False`, the `prepare_value` method in `JSONField` will output the actual Unicode characters instead of their ASCII escape sequences, making them display properly in the Django admin interface. This is exactly the right fix for the described problem.",
+  "fail_to_pass_passed": false,
+  "wall_clock_seconds": 2.99,
+  "estimated_cost_usd": 0.003
+}

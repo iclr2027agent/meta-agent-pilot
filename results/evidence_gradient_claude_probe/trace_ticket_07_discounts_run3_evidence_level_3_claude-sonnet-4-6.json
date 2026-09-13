@@ -1,0 +1,15 @@
+{
+  "instance_id": "ticket_07_discounts",
+  "run_index": 3,
+  "condition": "evidence_level_3",
+  "model": "claude-sonnet-4-6",
+  "problem_statement": "# TICKET-107: apply_discount() ignores max_discount entirely\n\n## Description\n`apply_discount()` in `toylib.discounts` is supposed to cap the applied\ndiscount at `max_discount` currency units, but for large prices combined\nwith large percentage discounts, the returned price is far lower than it\nshould be \u2014 the cap doesn't seem to apply at all.\n\n## Steps to reproduce\n```\nfrom toylib.discounts import apply_discount\napply_discount(1000, 90, 50)\n# expected: 950.0 (discount capped at 50)\n# actual:   100.0 (cap not applied \u2014 full 90% discount went through)\n```\n\n## Expected behavior\nThe discount actually subtracted from `price` must never exceed\n`max_discount`.\n\n## Acceptance criteria\n- Existing test suite passes (`pytest`).\n- No regression to other `toylib` behavior.\n- Behavior must remain correct beyond the single scenario shown above.\n",
+  "diff": "diff --git a/src/toylib/discounts.py b/src/toylib/discounts.py\nindex 0e15097..1425560 100644\n--- a/src/toylib/discounts.py\n+++ b/src/toylib/discounts.py\n@@ -3,7 +3,5 @@ def apply_discount(price: float, pct: float, max_discount: float) -> float:\n     units. The discount actually applied must never exceed max_discount.\n     \"\"\"\n     discount = price * pct / 100\n-    # BUG: max_discount is accepted as a parameter but never actually used\n-    # to cap the discount \u2014 large percentage discounts on large prices are\n-    # applied in full, uncapped.\n+    discount = min(discount, max_discount)\n     return price - discount\n",
+  "evidence_shown": "FAILED tests/test_discounts.py::test_discounts_case_3\n\n    def test_discounts_case_3():\n>       assert apply_discount(10, 500, 100) >= 0\nE       assert -40.0 >= 0\nE        +  where -40.0 = apply_discount(10, 500, 100)\n\ntests/test_discounts.py:13: AssertionError\n1 failed, 2 passed in 0.16s",
+  "claimed_success": false,
+  "reviewer_reasoning": "The diff correctly adds the `min(discount, max_discount)` cap, which fixes the primary bug described in the ticket. However, the test evidence shows a remaining test failure: `test_discounts_case_3` fails because `apply_discount(10, 500, 100)` returns `-40.0` instead of a value >= 0. This occurs because when pct=500, the raw discount is 50, which is less than max_discount=100, so min(50, 100)=50, and price-discount = 10-50 = -40. The fix doesn't handle the edge case where the discount exceeds the price itself (i.e., the returned price should never go below 0). Additionally, one might argue the discount should also be capped at `price` (so the result is never negative). Since a test is still failing after the proposed change, the fix is incomplete.",
+  "ground_truth_incomplete": true,
+  "correct": true,
+  "wall_clock_seconds": 7.53,
+  "estimated_cost_usd": 0.0051
+}

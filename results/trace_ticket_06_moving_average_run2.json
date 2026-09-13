@@ -1,0 +1,65 @@
+{
+  "ticket_id": "ticket_06_moving_average",
+  "run_index": 2,
+  "final_status": "complete",
+  "delegations": 4,
+  "appropriate_delegations": 2,
+  "agent_delegations": 2,
+  "agent_appropriate_delegations": 2,
+  "unnecessary_actions": 0,
+  "recoverable_failure_encountered": false,
+  "recoverable_failure_resolved": false,
+  "retries_used": 0,
+  "replans_used": 0,
+  "wall_clock_seconds": 14.69,
+  "human_interventions": 0,
+  "input_tokens": 2683,
+  "output_tokens": 537,
+  "estimated_cost_usd": 0.0161,
+  "claims": [
+    {
+      "attempt": 0,
+      "claimed_success": true,
+      "verified_success": true
+    }
+  ],
+  "baseline_failure_count": 11,
+  "regression_ever_detected": false,
+  "steps": [
+    {
+      "stage": "reset",
+      "detail": "repo reset to HEAD",
+      "t": 1788635657.853143
+    },
+    {
+      "stage": "baseline_snapshot",
+      "detail": "11 pre-existing failing tests: ['tests/test_cache.py::test_lru_evicts_least_recently_used', 'tests/test_dateutils.py::test_days_between_one_week', 'tests/test_dateutils.py::test_days_between_same_day', 'tests/test_discounts.py::test_discounts_case_3', 'tests/test_discounts.py::test_large_price_large_pct_is_capped', 'tests/test_listutils.py::test_dedupe_preserves_first_seen_order', 'tests/test_mathutils.py::test_is_prime_small_values', 'tests/test_statutils.py::test_moving_average_basic', 'tests/test_statutils.py::test_moving_average_single_element_window', 'tests/test_stringutils.py::test_truncate_custom_suffix', 'tests/test_stringutils.py::test_truncate_exact_length_result']",
+      "t": 1788635658.691553
+    },
+    {
+      "stage": "plan",
+      "detail": "{\"task_interpretation\": \"The `moving_average` function slices `values[i:i + window + 1]` instead of `values[i:i + window]`, including one extra element in each window sum while still dividing by `window`, producing inflated results.\", \"candidate_files\": [\"src/toylib/statutils.py\"], \"steps\": [\"In `src/toylib/statutils.py`, change line `window_slice = values[i:i + window + 1]` to `window_slice = values[i:i + window]` so the slice contains exactly `window` elements.\"], \"validation_strategy\": \"Run `pytest` to confirm the existing test suite passes; additionally verify manually that `moving_average([1, 2, 3, 4, 5], 2)` returns `[1.5, 2.5, 3.5, 4.5]` and that edge cases (window == 1, window == len(values)) also produce correct results.\", \"uncertainties\": []}",
+      "t": 1788635664.9523578
+    },
+    {
+      "stage": "implementation",
+      "detail": "wrote files: ['src/toylib/statutils.py']",
+      "t": 1788635670.611016
+    },
+    {
+      "stage": "diff",
+      "detail": "diff --git a/src/toylib/statutils.py b/src/toylib/statutils.py\nindex 679d9e1..36d633d 100644\n--- a/src/toylib/statutils.py\n+++ b/src/toylib/statutils.py\n@@ -9,12 +9,6 @@ def moving_average(values: list, window: int) -> list:\n         raise ValueError(\"window must be between 1 and len(values)\")\n     result = []\n     for i in range(len(values) - window + 1):\n-        # BUG: slices one element too many (window + 1 instead of window),\n-        # so every average silently includes one extra value from beyond\n-        # the intended window. Python slicing clips out-of-range bounds\n-        # instead of raising, so this doesn't crash \u2014 it just returns wrong\n-        # numbers, and happens to be correct only when the window already\n-        # reaches the end of the list (nothing left to over-include).\n-        window_slice = values[i:i + window + 1]\n+        window_slice = values[i:i + window]\n         result.append(sum(window_slice) / window)\n     return result\n",
+      "t": 1788635670.6802418
+    },
+    {
+      "stage": "verification",
+      "detail": "pytest passed=True",
+      "t": 1788635671.637562
+    },
+    {
+      "stage": "regression_check",
+      "detail": "new_failures=[]",
+      "t": 1788635672.4800892
+    }
+  ]
+}

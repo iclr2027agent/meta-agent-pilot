@@ -1,0 +1,65 @@
+{
+  "ticket_id": "ticket_10_username",
+  "run_index": 3,
+  "final_status": "complete",
+  "delegations": 4,
+  "appropriate_delegations": 2,
+  "agent_delegations": 2,
+  "agent_appropriate_delegations": 2,
+  "unnecessary_actions": 0,
+  "recoverable_failure_encountered": false,
+  "recoverable_failure_resolved": false,
+  "retries_used": 0,
+  "replans_used": 0,
+  "wall_clock_seconds": 13.36,
+  "human_interventions": 0,
+  "input_tokens": 2735,
+  "output_tokens": 386,
+  "estimated_cost_usd": 0.014,
+  "claims": [
+    {
+      "attempt": 0,
+      "claimed_success": true,
+      "verified_success": true
+    }
+  ],
+  "baseline_failure_count": 16,
+  "regression_ever_detected": false,
+  "steps": [
+    {
+      "stage": "reset",
+      "detail": "repo reset to HEAD",
+      "t": 1788642978.325959
+    },
+    {
+      "stage": "baseline_snapshot",
+      "detail": "16 pre-existing failing tests: ['tests/test_cache.py::test_lru_evicts_least_recently_used', 'tests/test_dateutils.py::test_days_between_one_week', 'tests/test_dateutils.py::test_days_between_same_day', 'tests/test_discounts.py::test_discounts_case_3', 'tests/test_discounts.py::test_large_price_large_pct_is_capped', 'tests/test_inventory.py::test_reserve_insufficient_leaves_stock_unchanged', 'tests/test_listutils.py::test_dedupe_preserves_first_seen_order', 'tests/test_mathutils.py::test_is_prime_small_values', 'tests/test_progress.py::test_progress_case_3', 'tests/test_progress.py::test_progress_over_100_is_capped', 'tests/test_statutils.py::test_moving_average_basic', 'tests/test_statutils.py::test_moving_average_single_element_window', 'tests/test_stringutils.py::test_truncate_custom_suffix', 'tests/test_stringutils.py::test_truncate_exact_length_result', 'tests/test_username.py::test_username_case_3', 'tests/test_username.py::test_username_case_insensitive_query']",
+      "t": 1788642979.265001
+    },
+    {
+      "stage": "plan",
+      "detail": "{\"task_interpretation\": \"The `is_username_taken()` function uses case-sensitive membership testing (`in`) instead of case-insensitive comparison, causing it to miss matches like 'Alice' vs 'alice'.\", \"candidate_files\": [\"src/toylib/username.py\"], \"steps\": [\"In `src/toylib/username.py`, change the return statement to normalize both the candidate username and all existing usernames to the same case (lowercase) before comparison: `return username.lower() in (u.lower() for u in existing_usernames)`.\"], \"validation_strategy\": \"Run the existing pytest suite to confirm the case-insensitive match scenario ('Alice' against ['alice', 'bob'] returns True) passes, and that no regressions are introduced in other toylib modules.\", \"uncertainties\": [\"There may be no pre-existing test for this function; if so, the fix should still be verifiable by adding or running any test that checks the described scenario.\"]}",
+      "t": 1788642986.217358
+    },
+    {
+      "stage": "implementation",
+      "detail": "wrote files: ['src/toylib/username.py']",
+      "t": 1788642989.8459892
+    },
+    {
+      "stage": "diff",
+      "detail": "diff --git a/src/toylib/username.py b/src/toylib/username.py\nindex 04f533b..f25c369 100644\n--- a/src/toylib/username.py\n+++ b/src/toylib/username.py\n@@ -2,7 +2,4 @@ def is_username_taken(username, existing_usernames):\n     \"\"\"Return True if username is already registered. Username matching\n     is case-insensitive.\n     \"\"\"\n-    # BUG: existing_usernames is checked for exact match, ignoring case,\n-    # so a username differing only in case from an existing one is not\n-    # detected as taken.\n-    return username in existing_usernames\n+    return username.lower() in (u.lower() for u in existing_usernames)\n",
+      "t": 1788642989.910354
+    },
+    {
+      "stage": "verification",
+      "detail": "pytest passed=True",
+      "t": 1788642990.733137
+    },
+    {
+      "stage": "regression_check",
+      "detail": "new_failures=[]",
+      "t": 1788642991.6052248
+    }
+  ]
+}

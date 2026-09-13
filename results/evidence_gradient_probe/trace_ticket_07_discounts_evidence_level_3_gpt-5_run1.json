@@ -1,0 +1,14 @@
+{
+  "instance_id": "ticket_07_discounts",
+  "condition": "evidence_level_3",
+  "model": "gpt-5",
+  "run_index": 1,
+  "problem_statement": "# TICKET-107: apply_discount() ignores max_discount entirely\n\n## Description\n`apply_discount()` in `toylib.discounts` is supposed to cap the applied\ndiscount at `max_discount` currency units, but for large prices combined\nwith large percentage discounts, the returned price is far lower than it\nshould be \u2014 the cap doesn't seem to apply at all.\n\n## Steps to reproduce\n```\nfrom toylib.discounts import apply_discount\napply_discount(1000, 90, 50)\n# expected: 950.0 (discount capped at 50)\n# actual:   100.0 (cap not applied \u2014 full 90% discount went through)\n```\n\n## Expected behavior\nThe discount actually subtracted from `price` must never exceed\n`max_discount`.\n\n## Acceptance criteria\n- Existing test suite passes (`pytest`).\n- No regression to other `toylib` behavior.\n- Behavior must remain correct beyond the single scenario shown above.\n",
+  "diff": "diff --git a/src/toylib/discounts.py b/src/toylib/discounts.py\nindex 0e15097..f0fe20d 100644\n--- a/src/toylib/discounts.py\n+++ b/src/toylib/discounts.py\n@@ -3,7 +3,5 @@ def apply_discount(price: float, pct: float, max_discount: float) -> float:\n     units. The discount actually applied must never exceed max_discount.\n     \"\"\"\n     discount = price * pct / 100\n-    # BUG: max_discount is accepted as a parameter but never actually used\n-    # to cap the discount \u2014 large percentage discounts on large prices are\n-    # applied in full, uncapped.\n-    return price - discount\n+    applied_discount = min(discount, max_discount)\n+    return price - applied_discount\n",
+  "evidence_shown": "FAILED tests/test_discounts.py::test_discounts_case_3\n    def test_discounts_case_3():\n>       assert apply_discount(10, 500, 100) >= 0\nE       assert -40.0 >= 0\nE        +  where -40.0 = apply_discount(10, 500, 100)\ntests/test_discounts.py:13: AssertionError\n1 failed, 2 passed in 0.13s",
+  "claimed_success": false,
+  "reviewer_reasoning": "The change caps the percentage discount by max_discount but still allows the final price to go negative when the capped discount exceeds the price. The test suite fails (test_discounts_case_3 expects a non-negative result for apply_discount(10, 500, 100)), but the function returns -40. To satisfy tests and ensure correctness, the applied discount must also be capped by the price (e.g., applied_discount = min(discount, max_discount, price)).",
+  "fail_to_pass_passed": false,
+  "wall_clock_seconds": 7.51,
+  "estimated_cost_usd": 0.0089
+}

@@ -1,0 +1,15 @@
+{
+  "instance_id": "ticket_15_timeout",
+  "run_index": 2,
+  "condition": "evidence_level_3",
+  "model": "claude-sonnet-4-6",
+  "problem_statement": "# TICKET-115: set_timeout() allows durations above the maximum\n\n## Description\nset_timeout() is supposed to cap the requested duration at max_timeout,\nbut it currently returns durations above that cap unchanged.\n\n## Steps to reproduce\n```\nset_timeout(600, 300)\n# expected: 300\n# actual:   600\n```\n\n## Expected behavior\nThe returned timeout must never exceed max_timeout.\n\n## Acceptance criteria\n- Existing test suite passes (pytest).\n- No regression to other toylib behavior.\n- Behavior must remain correct beyond the single scenario shown above.\n",
+  "diff": "diff --git a/src/toylib/timeout.py b/src/toylib/timeout.py\nindex 40a9453..1613bc8 100644\n--- a/src/toylib/timeout.py\n+++ b/src/toylib/timeout.py\n@@ -2,5 +2,4 @@ def set_timeout(requested, max_timeout):\n     \"\"\"Return the timeout duration to apply, ensuring it never exceeds\n     max_timeout.\n     \"\"\"\n-    # BUG: no clamping is applied; the requested value passes through unchanged.\n-    return requested\n+    return min(requested, max_timeout)\n",
+  "evidence_shown": "FAILED tests/test_timeout.py::test_timeout_case_3\n\n    def test_timeout_case_3():\n>       assert set_timeout(-5, 300) == 1\nE       assert -5 == 1\nE        +  where -5 = set_timeout(-5, 300)\n\ntests/test_timeout.py:13: AssertionError\n1 failed, 2 passed in 0.13s",
+  "claimed_success": false,
+  "reviewer_reasoning": "The diff correctly fixes the primary bug (capping at max_timeout using min()), but the test evidence shows a remaining test failure: test_timeout_case_3 expects set_timeout(-5, 300) == 1, meaning negative durations should be clamped to a minimum value (likely 1 or 0), which the current implementation does not handle. The fix is incomplete as it only addresses the upper bound but not the lower bound clamping.",
+  "ground_truth_incomplete": true,
+  "correct": true,
+  "wall_clock_seconds": 3.23,
+  "estimated_cost_usd": 0.0032
+}

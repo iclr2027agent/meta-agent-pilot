@@ -1,0 +1,23 @@
+{
+  "instance_id": "django__django-13346",
+  "harness": "swe-agent",
+  "model": "claude-sonnet-4-6",
+  "run_index": 1,
+  "final_diff": "diff --git a/django/db/models/fields/json.py b/django/db/models/fields/json.py\nindex fafc1beee8..59c900c98e 100644\n--- a/django/db/models/fields/json.py\n+++ b/django/db/models/fields/json.py\n@@ -423,6 +423,24 @@ class KeyTransformExact(JSONExact):\n         return super().as_sql(compiler, connection)\n \n \n+class KeyTransformIn(lookups.In):\n+    def resolve_expression_parameter(self, compiler, connection, sql, param):\n+        sql, params = super().resolve_expression_parameter(\n+            compiler, connection, sql, param,\n+        )\n+        if not hasattr(param, 'as_sql'):\n+            if connection.vendor == 'oracle':\n+                value = json.loads(param)\n+                if isinstance(value, (list, dict)):\n+                    sql = \"JSON_QUERY('%s', '$.value')\" % json.dumps({'value': value})\n+                else:\n+                    sql = \"JSON_VALUE('%s', '$.value')\" % json.dumps({'value': value})\n+                params = []\n+            elif connection.vendor in {'sqlite', 'mysql'}:\n+                sql = \"JSON_EXTRACT(%s, '$')\"\n+        return sql, params\n+\n+\n class KeyTransformIExact(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IExact):\n     pass\n \n@@ -480,6 +498,7 @@ class KeyTransformGte(KeyTransformNumericLookupMixin, lookups.GreaterThanOrEqual\n \n \n KeyTransform.register_lookup(KeyTransformExact)\n+KeyTransform.register_lookup(KeyTransformIn)\n KeyTransform.register_lookup(KeyTransformIExact)\n KeyTransform.register_lookup(KeyTransformIsNull)\n KeyTransform.register_lookup(KeyTransformIContains)\n",
+  "fail_to_pass_passed": true,
+  "pass_to_pass_passed": true,
+  "resolved": true,
+  "fail_to_pass_detail": {
+    "success": [
+      "test_key_in (model_fields.test_jsonfield.TestQuerying)",
+      "test_key_iregex (model_fields.test_jsonfield.TestQuerying)"
+    ],
+    "failure": []
+  },
+  "total_turns": 101,
+  "self_correction_observed": true,
+  "self_correction_detail": "Ran the JSONField, lookup, queries, and expressions test suites repeatedly across the trajectory (multiple 'All tests pass' checkpoints), converging on a fix that the real SWE-bench harness independently confirmed resolves both FAIL_TO_PASS tests with no regressions.",
+  "estimated_cost_usd": 2.3452,
+  "total_tokens_sent": 4292700,
+  "total_tokens_received": 16081
+}

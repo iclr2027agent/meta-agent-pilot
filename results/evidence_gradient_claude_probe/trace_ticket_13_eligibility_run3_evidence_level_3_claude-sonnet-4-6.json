@@ -1,0 +1,15 @@
+{
+  "instance_id": "ticket_13_eligibility",
+  "run_index": 3,
+  "condition": "evidence_level_3",
+  "model": "claude-sonnet-4-6",
+  "problem_statement": "# TICKET-113: is_eligible() accepts applicants above the maximum age\n\n## Description\nis_eligible() is supposed to reject anyone older than max_age, but it\ncurrently marks everyone eligible regardless of age.\n\n## Steps to reproduce\n```\nis_eligible(150, 65)\n# expected: False\n# actual:   True\n```\n\n## Expected behavior\nAnyone older than max_age must be rejected.\n\n## Acceptance criteria\n- Existing test suite passes (pytest).\n- No regression to other toylib behavior.\n- Behavior must remain correct beyond the single scenario shown above.\n",
+  "diff": "diff --git a/src/toylib/eligibility.py b/src/toylib/eligibility.py\nindex 8e3c1f8..f640897 100644\n--- a/src/toylib/eligibility.py\n+++ b/src/toylib/eligibility.py\n@@ -2,5 +2,4 @@ def is_eligible(age, max_age):\n     \"\"\"Return True if age qualifies, ensuring anyone above max_age is\n     rejected.\n     \"\"\"\n-    # BUG: always returns True regardless of age.\n-    return True\n+    return age <= max_age\n",
+  "evidence_shown": "FAILED tests/test_eligibility.py::test_eligibility_case_3\n\n    def test_eligibility_case_3():\n>       assert is_eligible(-5, 65) is False\nE       assert True is False\nE        +  where True = is_eligible(-5, 65)\n\ntests/test_eligibility.py:13: AssertionError\n1 failed, 2 passed in 0.15s",
+  "claimed_success": false,
+  "reviewer_reasoning": "The fix correctly addresses the max_age bug by changing 'return True' to 'return age <= max_age', but the test evidence shows a new test failure: test_eligibility_case_3 expects is_eligible(-5, 65) to return False, but the implementation returns True because -5 <= 65. The fix introduces a regression (or fails an existing test) for negative ages, meaning the acceptance criteria requiring the existing test suite to pass is not met.",
+  "ground_truth_incomplete": true,
+  "correct": true,
+  "wall_clock_seconds": 4.55,
+  "estimated_cost_usd": 0.0032
+}

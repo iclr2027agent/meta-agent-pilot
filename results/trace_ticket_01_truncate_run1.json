@@ -1,0 +1,65 @@
+{
+  "ticket_id": "ticket_01_truncate",
+  "run_index": 1,
+  "final_status": "complete",
+  "delegations": 4,
+  "appropriate_delegations": 2,
+  "agent_delegations": 2,
+  "agent_appropriate_delegations": 2,
+  "unnecessary_actions": 0,
+  "recoverable_failure_encountered": false,
+  "recoverable_failure_resolved": false,
+  "retries_used": 0,
+  "replans_used": 0,
+  "wall_clock_seconds": 13.46,
+  "human_interventions": 0,
+  "input_tokens": 2502,
+  "output_tokens": 546,
+  "estimated_cost_usd": 0.0157,
+  "claims": [
+    {
+      "attempt": 0,
+      "claimed_success": true,
+      "verified_success": true
+    }
+  ],
+  "baseline_failure_count": 11,
+  "regression_ever_detected": false,
+  "steps": [
+    {
+      "stage": "reset",
+      "detail": "repo reset to HEAD",
+      "t": 1788635451.061451
+    },
+    {
+      "stage": "baseline_snapshot",
+      "detail": "11 pre-existing failing tests: ['tests/test_cache.py::test_lru_evicts_least_recently_used', 'tests/test_dateutils.py::test_days_between_one_week', 'tests/test_dateutils.py::test_days_between_same_day', 'tests/test_discounts.py::test_discounts_case_3', 'tests/test_discounts.py::test_large_price_large_pct_is_capped', 'tests/test_listutils.py::test_dedupe_preserves_first_seen_order', 'tests/test_mathutils.py::test_is_prime_small_values', 'tests/test_statutils.py::test_moving_average_basic', 'tests/test_statutils.py::test_moving_average_single_element_window', 'tests/test_stringutils.py::test_truncate_custom_suffix', 'tests/test_stringutils.py::test_truncate_exact_length_result']",
+      "t": 1788635452.075608
+    },
+    {
+      "stage": "plan",
+      "detail": "{\"task_interpretation\": \"The `truncate()` function computes the wrong cutoff index by adding 1 to `max_len - len(suffix)`, causing the returned string to be one character longer than `max_len`.\", \"candidate_files\": [\"src/toylib/stringutils.py\"], \"steps\": [\"Remove the `+ 1` from the cutoff calculation in `truncate()`, changing `cutoff = max_len - len(suffix) + 1` to `cutoff = max_len - len(suffix)`, so that `text[:cutoff] + suffix` is exactly `max_len` characters long.\"], \"validation_strategy\": \"Run `pytest` to confirm the existing test suite passes; also manually verify that `truncate('hello world', 8)` returns a string of length 8 (e.g. `'hello...'`).\", \"uncertainties\": [\"There may be an edge case when `len(suffix) > max_len`; current ticket does not mention it, and existing tests likely don't cover it, so no change is needed beyond the one-line fix unless tests reveal otherwise.\"]}",
+      "t": 1788635458.654424
+    },
+    {
+      "stage": "implementation",
+      "detail": "wrote files: ['src/toylib/stringutils.py']",
+      "t": 1788635462.382841
+    },
+    {
+      "stage": "diff",
+      "detail": "diff --git a/src/toylib/stringutils.py b/src/toylib/stringutils.py\nindex a99944a..b79bfc0 100644\n--- a/src/toylib/stringutils.py\n+++ b/src/toylib/stringutils.py\n@@ -6,9 +6,7 @@ def truncate(text: str, max_len: int, suffix: str = \"...\") -> str:\n     \"\"\"\n     if len(text) <= max_len:\n         return text\n-    # BUG: off-by-one \u2014 does not leave room for the suffix, so the\n-    # returned string ends up longer than max_len.\n-    cutoff = max_len - len(suffix) + 1\n+    cutoff = max_len - len(suffix)\n     return text[:cutoff] + suffix\n \n \n",
+      "t": 1788635462.4547908
+    },
+    {
+      "stage": "verification",
+      "detail": "pytest passed=True",
+      "t": 1788635463.528003
+    },
+    {
+      "stage": "regression_check",
+      "detail": "new_failures=[]",
+      "t": 1788635464.456198
+    }
+  ]
+}

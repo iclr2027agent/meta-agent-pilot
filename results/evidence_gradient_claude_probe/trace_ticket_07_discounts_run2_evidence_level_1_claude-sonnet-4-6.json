@@ -1,0 +1,15 @@
+{
+  "instance_id": "ticket_07_discounts",
+  "run_index": 2,
+  "condition": "evidence_level_1",
+  "model": "claude-sonnet-4-6",
+  "problem_statement": "# TICKET-107: apply_discount() ignores max_discount entirely\n\n## Description\n`apply_discount()` in `toylib.discounts` is supposed to cap the applied\ndiscount at `max_discount` currency units, but for large prices combined\nwith large percentage discounts, the returned price is far lower than it\nshould be \u2014 the cap doesn't seem to apply at all.\n\n## Steps to reproduce\n```\nfrom toylib.discounts import apply_discount\napply_discount(1000, 90, 50)\n# expected: 950.0 (discount capped at 50)\n# actual:   100.0 (cap not applied \u2014 full 90% discount went through)\n```\n\n## Expected behavior\nThe discount actually subtracted from `price` must never exceed\n`max_discount`.\n\n## Acceptance criteria\n- Existing test suite passes (`pytest`).\n- No regression to other `toylib` behavior.\n- Behavior must remain correct beyond the single scenario shown above.\n",
+  "diff": "diff --git a/src/toylib/discounts.py b/src/toylib/discounts.py\nindex 0e15097..1425560 100644\n--- a/src/toylib/discounts.py\n+++ b/src/toylib/discounts.py\n@@ -3,7 +3,5 @@ def apply_discount(price: float, pct: float, max_discount: float) -> float:\n     units. The discount actually applied must never exceed max_discount.\n     \"\"\"\n     discount = price * pct / 100\n-    # BUG: max_discount is accepted as a parameter but never actually used\n-    # to cap the discount \u2014 large percentage discounts on large prices are\n-    # applied in full, uncapped.\n+    discount = min(discount, max_discount)\n     return price - discount\n",
+  "evidence_shown": "The test suite reported: FAILURE (1 failed, 2 passed)",
+  "claimed_success": false,
+  "reviewer_reasoning": "The test suite reports 1 failed test, meaning the fix does not fully pass all tests. While the code change looks logically correct (adding `discount = min(discount, max_discount)` to cap the discount), there is still a failing test, which means the fix either introduces a regression or doesn't fully address all acceptance criteria. The acceptance criteria explicitly require that the existing test suite passes, which it does not.",
+  "ground_truth_incomplete": true,
+  "correct": true,
+  "wall_clock_seconds": 3.09,
+  "estimated_cost_usd": 0.0032
+}

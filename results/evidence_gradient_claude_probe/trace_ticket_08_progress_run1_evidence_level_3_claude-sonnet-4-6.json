@@ -1,0 +1,15 @@
+{
+  "instance_id": "ticket_08_progress",
+  "run_index": 1,
+  "condition": "evidence_level_3",
+  "model": "claude-sonnet-4-6",
+  "problem_statement": "# TICKET-108: progress_percentage() does not cap at 100%\n\n## Description\nprogress_percentage() is supposed to report completion percentage capped\nat 100, but when `completed` exceeds `total`, the returned value goes\nabove 100 instead of being capped.\n\n## Steps to reproduce\n```\nfrom toylib.progress import progress_percentage\nprogress_percentage(150, 100)\n# expected: 100.0\n# actual:   150.0\n```\n\n## Expected behavior\nThe returned percentage must never exceed 100.\n\n## Acceptance criteria\n- Existing test suite passes (pytest).\n- No regression to other toylib behavior.\n- Behavior must remain correct for edge cases, not only the scenario above.\n",
+  "diff": "diff --git a/src/toylib/progress.py b/src/toylib/progress.py\nindex 2378daa..6224993 100644\n--- a/src/toylib/progress.py\n+++ b/src/toylib/progress.py\n@@ -5,6 +5,4 @@ def progress_percentage(completed: int, total: int) -> float:\n     if total == 0:\n         return 0.0\n     pct = (completed / total) * 100\n-    # BUG: pct is never capped, so completed > total produces a result\n-    # above 100.\n-    return pct\n+    return min(pct, 100.0)\n",
+  "evidence_shown": "FAILED tests/test_progress.py::test_progress_case_3\n\n    def test_progress_case_3():\n>       assert progress_percentage(-20, 100) >= 0\nE       assert -20.0 >= 0\nE        +  where -20.0 = progress_percentage(-20, 100)\n\ntests/test_progress.py:13: AssertionError\n1 failed, 2 passed in 0.14s",
+  "claimed_success": false,
+  "reviewer_reasoning": "The diff fixes the upper bound cap (capping at 100%) but does not fix the lower bound. The test evidence shows a failing test: progress_percentage(-20, 100) returns -20.0 instead of being capped at 0. The fix only adds min(pct, 100.0) but does not add max(pct, 0.0) to handle negative completed values. The acceptance criteria states 'Behavior must remain correct for edge cases, not only the scenario above,' and a negative percentage is clearly an edge case that is not handled. The test suite still fails after this change.",
+  "ground_truth_incomplete": true,
+  "correct": true,
+  "wall_clock_seconds": 3.61,
+  "estimated_cost_usd": 0.0038
+}

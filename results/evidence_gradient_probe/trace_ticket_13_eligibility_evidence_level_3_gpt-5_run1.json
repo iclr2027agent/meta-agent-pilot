@@ -1,0 +1,14 @@
+{
+  "instance_id": "ticket_13_eligibility",
+  "condition": "evidence_level_3",
+  "model": "gpt-5",
+  "run_index": 1,
+  "problem_statement": "# TICKET-113: is_eligible() accepts applicants above the maximum age\n\n## Description\nis_eligible() is supposed to reject anyone older than max_age, but it\ncurrently marks everyone eligible regardless of age.\n\n## Steps to reproduce\n```\nis_eligible(150, 65)\n# expected: False\n# actual:   True\n```\n\n## Expected behavior\nAnyone older than max_age must be rejected.\n\n## Acceptance criteria\n- Existing test suite passes (pytest).\n- No regression to other toylib behavior.\n- Behavior must remain correct beyond the single scenario shown above.\n",
+  "diff": "diff --git a/src/toylib/eligibility.py b/src/toylib/eligibility.py\nindex 8e3c1f8..f640897 100644\n--- a/src/toylib/eligibility.py\n+++ b/src/toylib/eligibility.py\n@@ -2,5 +2,4 @@ def is_eligible(age, max_age):\n     \"\"\"Return True if age qualifies, ensuring anyone above max_age is\n     rejected.\n     \"\"\"\n-    # BUG: always returns True regardless of age.\n-    return True\n+    return age <= max_age\n",
+  "evidence_shown": "FAILED tests/test_eligibility.py::test_eligibility_case_3\n    def test_eligibility_case_3():\n>       assert is_eligible(-5, 65) is False\nE       assert True is False\nE        +  where True = is_eligible(-5, 65)\ntests/test_eligibility.py:13: AssertionError\n1 failed, 2 passed in 0.13s",
+  "claimed_success": false,
+  "reviewer_reasoning": "The change enforces the upper bound (age <= max_age) but fails the existing test suite. tests/test_eligibility.py expects negative ages to be rejected (is_eligible(-5, 65) -> False), while the new logic returns True. Acceptance criteria require all tests to pass and behavior to be correct beyond the single scenario. The function must also reject invalid ages (e.g., negative), such as by enforcing age >= 0 in addition to age <= max_age.",
+  "fail_to_pass_passed": false,
+  "wall_clock_seconds": 4.1,
+  "estimated_cost_usd": 0.0056
+}

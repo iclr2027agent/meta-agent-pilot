@@ -1,0 +1,33 @@
+{
+  "instance_id": "django__django-13512",
+  "harness": "swe-agent",
+  "model": "claude-sonnet-4-6",
+  "run_index": 1,
+  "final_diff": "diff --git a/django/forms/fields.py b/django/forms/fields.py\nindex 9de2c60b35..17c7956b53 100644\n--- a/django/forms/fields.py\n+++ b/django/forms/fields.py\n@@ -1258,7 +1258,7 @@ class JSONField(CharField):\n     def prepare_value(self, value):\n         if isinstance(value, InvalidJSONInput):\n             return value\n-        return json.dumps(value, cls=self.encoder)\n+        return json.dumps(value, ensure_ascii=False, cls=self.encoder)\n \n     def has_changed(self, initial, data):\n         if super().has_changed(initial, data):\n",
+  "fail_to_pass_passed": false,
+  "pass_to_pass_passed": true,
+  "resolved": false,
+  "fail_to_pass_detail": {
+    "success": [
+      "test_prepare_value (forms_tests.field_tests.test_jsonfield.JSONFieldTest)"
+    ],
+    "failure": [
+      "test_json_display_for_field (admin_utils.tests.UtilsTests)",
+      "test_label_for_field (admin_utils.tests.UtilsTests)"
+    ]
+  },
+  "total_turns": 33,
+  "self_correction_observed": true,
+  "self_correction_detail": "Ran python runtests.py forms_tests and model_fields.test_jsonfield multiple times, plus a custom edge-case script; all reported passing. Never ran admin_utils (where the held-out test_json_display_for_field/test_label_for_field live), so its self-testing never surfaced the missing admin-side fix.",
+  "estimated_cost_usd": 0.3286,
+  "total_tokens_sent": 410355,
+  "total_tokens_received": 1043,
+  "fail_to_pass_detail_corrected": {
+    "note": "swebench's Django log parser (harness/log_parsers/python.py parse_log_django) misclassified test_label_for_field as FAILED due to a merged status line in the raw output: 'test_json_display_for_field (...) ... test_label_for_field (...) ... ok' - test_json_display_for_field's own subTest never printed a terminating ' ... ok'/' ... FAIL' on its own line (it's a parameterized test over multiple values), so its start-marker ran directly into test_label_for_field's line. The parser's `line.rsplit(' ... ok', 1)[0]` then produces a garbled compound key matching neither real test name, so test_label_for_field's real pass never gets recorded under its own name - it falls through as unreported/failed. Verified directly: Django's own summary line reads 'Ran 35 tests in 0.083s / FAILED (failures=1)' with exactly one FAIL block shown (test_json_display_for_field only). test_label_for_field genuinely passed.",
+    "test_prepare_value": "PASS (genuine)",
+    "test_json_display_for_field": "FAIL (genuine - admin_utils.utils.display_for_field still uses ensure_ascii=True; SWE-agent's fix only touched forms/fields.py JSONField.prepare_value, not the admin display path)",
+    "test_label_for_field": "PASS (genuine - misclassified by parser artifact, NOT a real failure)"
+  },
+  "resolved_corrected": false,
+  "resolved_correction_note": "Still unresolved overall (test_json_display_for_field genuinely fails), but only 1 of 3 FAIL_TO_PASS tests actually fails, not 2 - the single missed location is the admin display path (django/contrib/admin/utils.py's display_for_field), confirmed as the one place SWE-agent's single-location fix didn't reach."
+}

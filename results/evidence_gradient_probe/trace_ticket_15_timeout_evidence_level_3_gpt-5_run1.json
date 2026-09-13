@@ -1,0 +1,14 @@
+{
+  "instance_id": "ticket_15_timeout",
+  "condition": "evidence_level_3",
+  "model": "gpt-5",
+  "run_index": 1,
+  "problem_statement": "# TICKET-115: set_timeout() allows durations above the maximum\n\n## Description\nset_timeout() is supposed to cap the requested duration at max_timeout,\nbut it currently returns durations above that cap unchanged.\n\n## Steps to reproduce\n```\nset_timeout(600, 300)\n# expected: 300\n# actual:   600\n```\n\n## Expected behavior\nThe returned timeout must never exceed max_timeout.\n\n## Acceptance criteria\n- Existing test suite passes (pytest).\n- No regression to other toylib behavior.\n- Behavior must remain correct beyond the single scenario shown above.\n",
+  "diff": "diff --git a/src/toylib/timeout.py b/src/toylib/timeout.py\nindex 40a9453..1613bc8 100644\n--- a/src/toylib/timeout.py\n+++ b/src/toylib/timeout.py\n@@ -2,5 +2,4 @@ def set_timeout(requested, max_timeout):\n     \"\"\"Return the timeout duration to apply, ensuring it never exceeds\n     max_timeout.\n     \"\"\"\n-    # BUG: no clamping is applied; the requested value passes through unchanged.\n-    return requested\n+    return min(requested, max_timeout)\n",
+  "evidence_shown": "FAILED tests/test_timeout.py::test_timeout_case_3\n    def test_timeout_case_3():\n>       assert set_timeout(-5, 300) == 1\nE       assert -5 == 1\ntests/test_timeout.py:13: AssertionError",
+  "claimed_success": false,
+  "reviewer_reasoning": "The change only caps the upper bound using min(requested, max_timeout) and fails to clamp lower/invalid values. The test suite expects negative inputs to be raised to a minimum (e.g., set_timeout(-5, 300) == 1), but the function returns -5, causing tests to fail. Thus, acceptance criteria are not met and the behavior is not fully correct beyond the single scenario.",
+  "fail_to_pass_passed": false,
+  "wall_clock_seconds": 6.32,
+  "estimated_cost_usd": 0.0054
+}

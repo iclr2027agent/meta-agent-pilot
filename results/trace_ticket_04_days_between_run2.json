@@ -1,0 +1,65 @@
+{
+  "ticket_id": "ticket_04_days_between",
+  "run_index": 2,
+  "final_status": "complete",
+  "delegations": 4,
+  "appropriate_delegations": 2,
+  "agent_delegations": 2,
+  "agent_appropriate_delegations": 2,
+  "unnecessary_actions": 0,
+  "recoverable_failure_encountered": false,
+  "recoverable_failure_resolved": false,
+  "retries_used": 0,
+  "replans_used": 0,
+  "wall_clock_seconds": 11.66,
+  "human_interventions": 0,
+  "input_tokens": 2445,
+  "output_tokens": 459,
+  "estimated_cost_usd": 0.0142,
+  "claims": [
+    {
+      "attempt": 0,
+      "claimed_success": true,
+      "verified_success": true
+    }
+  ],
+  "baseline_failure_count": 11,
+  "regression_ever_detected": false,
+  "steps": [
+    {
+      "stage": "reset",
+      "detail": "repo reset to HEAD",
+      "t": 1788635575.257889
+    },
+    {
+      "stage": "baseline_snapshot",
+      "detail": "11 pre-existing failing tests: ['tests/test_cache.py::test_lru_evicts_least_recently_used', 'tests/test_dateutils.py::test_days_between_one_week', 'tests/test_dateutils.py::test_days_between_same_day', 'tests/test_discounts.py::test_discounts_case_3', 'tests/test_discounts.py::test_large_price_large_pct_is_capped', 'tests/test_listutils.py::test_dedupe_preserves_first_seen_order', 'tests/test_mathutils.py::test_is_prime_small_values', 'tests/test_statutils.py::test_moving_average_basic', 'tests/test_statutils.py::test_moving_average_single_element_window', 'tests/test_stringutils.py::test_truncate_custom_suffix', 'tests/test_stringutils.py::test_truncate_exact_length_result']",
+      "t": 1788635576.187228
+    },
+    {
+      "stage": "plan",
+      "detail": "{\"task_interpretation\": \"The `days_between` function in `dateutils.py` incorrectly adds 1 to `delta.days`, causing an off-by-one error where same-date inputs return 1 instead of 0.\", \"candidate_files\": [\"src/toylib/dateutils.py\"], \"steps\": [\"Open `src/toylib/dateutils.py` and locate the `days_between` function.\", \"Change `return delta.days + 1` to `return delta.days` to remove the spurious +1.\"], \"validation_strategy\": \"Run `pytest` to confirm the existing test suite passes; manually verify that `days_between(date(2026,1,1), date(2026,1,1))` returns 0 and `days_between(date(2026,1,1), date(2026,1,8))` returns 7.\", \"uncertainties\": []}",
+      "t": 1788635581.4152489
+    },
+    {
+      "stage": "implementation",
+      "detail": "wrote files: ['src/toylib/dateutils.py']",
+      "t": 1788635584.848932
+    },
+    {
+      "stage": "diff",
+      "detail": "diff --git a/src/toylib/dateutils.py b/src/toylib/dateutils.py\nindex 7f7c74e..a7d123a 100644\n--- a/src/toylib/dateutils.py\n+++ b/src/toylib/dateutils.py\n@@ -7,9 +7,7 @@ def days_between(start: date, end: date) -> int:\n     Assumes end is on or after start; result is non-negative.\n     \"\"\"\n     delta = end - start\n-    # BUG: adds an extra day, so the result is always one higher than\n-    # the correct number of days between the two dates.\n-    return delta.days + 1\n+    return delta.days\n \n \n def is_weekend(d: date) -> bool:\n",
+      "t": 1788635584.9158359
+    },
+    {
+      "stage": "verification",
+      "detail": "pytest passed=True",
+      "t": 1788635585.92434
+    },
+    {
+      "stage": "regression_check",
+      "detail": "new_failures=[]",
+      "t": 1788635586.84619
+    }
+  ]
+}

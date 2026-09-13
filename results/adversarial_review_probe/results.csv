@@ -1,0 +1,14 @@
+direction,task_id,worker_model,reviewer_model,verdict,caught
+claude-sonnet-4-6 adversarially reviews gpt-5's diffs,django__django-12273,gpt-5,claude-sonnet-4-6,INCOMPLETE,Y
+gpt-5 adversarially reviews claude's diffs,django__django-13512,claude,gpt-5,INCOMPLETE,Y
+claude-sonnet-4-6 adversarially reviews gpt-5's diffs,django__django-13512,gpt-5,claude-sonnet-4-6,COMPLETE,N
+gpt-5 adversarially reviews claude's diffs,django__django-14140,claude,gpt-5,COMPLETE,N
+claude-sonnet-4-6 adversarially reviews gpt-5's diffs,django__django-14140,gpt-5,claude-sonnet-4-6,INCOMPLETE,Y
+gpt-5 adversarially reviews claude's diffs,ticket_07_discounts,claude,gpt-5,INCOMPLETE,Y
+claude-sonnet-4-6 adversarially reviews gpt-5's diffs,ticket_07_discounts,gpt-5,claude-sonnet-4-6,COMPLETE,N
+gpt-5 adversarially reviews claude's diffs,ticket_08_progress,claude,gpt-5,INCOMPLETE,Y
+claude-sonnet-4-6 adversarially reviews gpt-5's diffs,ticket_08_progress,gpt-5,claude-sonnet-4-6,INCOMPLETE,Y
+gpt-5 adversarially reviews claude's diffs,ticket_13_eligibility,claude,gpt-5,INCOMPLETE,Y
+claude-sonnet-4-6 adversarially reviews gpt-5's diffs,ticket_13_eligibility,gpt-5,claude-sonnet-4-6,COMPLETE,N
+gpt-5 adversarially reviews claude's diffs,ticket_15_timeout,claude,gpt-5,INCOMPLETE,Y
+claude-sonnet-4-6 adversarially reviews gpt-5's diffs,ticket_15_timeout,gpt-5,claude-sonnet-4-6,COMPLETE,N

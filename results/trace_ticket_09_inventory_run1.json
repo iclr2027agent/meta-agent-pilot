@@ -1,0 +1,65 @@
+{
+  "ticket_id": "ticket_09_inventory",
+  "run_index": 1,
+  "final_status": "complete",
+  "delegations": 4,
+  "appropriate_delegations": 2,
+  "agent_delegations": 2,
+  "agent_appropriate_delegations": 2,
+  "unnecessary_actions": 0,
+  "recoverable_failure_encountered": false,
+  "recoverable_failure_resolved": false,
+  "retries_used": 0,
+  "replans_used": 0,
+  "wall_clock_seconds": 14.11,
+  "human_interventions": 0,
+  "input_tokens": 2760,
+  "output_tokens": 461,
+  "estimated_cost_usd": 0.0152,
+  "claims": [
+    {
+      "attempt": 0,
+      "claimed_success": true,
+      "verified_success": true
+    }
+  ],
+  "baseline_failure_count": 14,
+  "regression_ever_detected": false,
+  "steps": [
+    {
+      "stage": "reset",
+      "detail": "repo reset to HEAD",
+      "t": 1788642000.548276
+    },
+    {
+      "stage": "baseline_snapshot",
+      "detail": "14 pre-existing failing tests: ['tests/test_cache.py::test_lru_evicts_least_recently_used', 'tests/test_dateutils.py::test_days_between_one_week', 'tests/test_dateutils.py::test_days_between_same_day', 'tests/test_discounts.py::test_discounts_case_3', 'tests/test_discounts.py::test_large_price_large_pct_is_capped', 'tests/test_inventory.py::test_reserve_insufficient_leaves_stock_unchanged', 'tests/test_listutils.py::test_dedupe_preserves_first_seen_order', 'tests/test_mathutils.py::test_is_prime_small_values', 'tests/test_progress.py::test_progress_case_3', 'tests/test_progress.py::test_progress_over_100_is_capped', 'tests/test_statutils.py::test_moving_average_basic', 'tests/test_statutils.py::test_moving_average_single_element_window', 'tests/test_stringutils.py::test_truncate_custom_suffix', 'tests/test_stringutils.py::test_truncate_exact_length_result']",
+      "t": 1788642001.538518
+    },
+    {
+      "stage": "plan",
+      "detail": "{\"task_interpretation\": \"In `Inventory.reserve()`, stock is decremented before checking if it's sufficient, causing stock to go negative on failed reservations instead of remaining unchanged.\", \"candidate_files\": [\"src/toylib/inventory.py\"], \"steps\": [\"In `reserve()`, check `self.stock[sku] >= qty` before mutating anything \\u2014 if insufficient, return False immediately without touching stock.\", \"Only decrement `self.stock[sku]` after confirming the check passes, then return True.\"], \"validation_strategy\": \"Run the existing pytest suite to confirm all tests pass; additionally verify manually that `Inventory({'a': 2}).reserve('a', 5)` returns False and stock['a'] remains 2, and that `Inventory({'a': 5}).reserve('a', 5)` returns True and stock['a'] becomes 0.\", \"uncertainties\": [\"Whether the existing test suite already covers the edge case where qty exactly equals available stock (should succeed); the fix naturally handles this but worth confirming tests exist for it.\"]}",
+      "t": 1788642008.6827252
+    },
+    {
+      "stage": "implementation",
+      "detail": "wrote files: ['src/toylib/inventory.py']",
+      "t": 1788642012.488144
+    },
+    {
+      "stage": "diff",
+      "detail": "diff --git a/src/toylib/inventory.py b/src/toylib/inventory.py\nindex 86594ea..dd820bc 100644\n--- a/src/toylib/inventory.py\n+++ b/src/toylib/inventory.py\n@@ -6,10 +6,7 @@ class Inventory:\n         \"\"\"Reserve qty units of sku. Return True and decrement stock if\n         available; return False and leave stock unchanged if insufficient.\n         \"\"\"\n-        # BUG: stock is decremented before checking availability, so an\n-        # insufficient reservation still mutates stock (and can drive it\n-        # negative) instead of leaving it unchanged.\n-        self.stock[sku] -= qty\n-        if self.stock[sku] < 0:\n+        if self.stock[sku] < qty:\n             return False\n+        self.stock[sku] -= qty\n         return True\n",
+      "t": 1788642012.5341198
+    },
+    {
+      "stage": "verification",
+      "detail": "pytest passed=True",
+      "t": 1788642013.545674
+    },
+    {
+      "stage": "regression_check",
+      "detail": "new_failures=[]",
+      "t": 1788642014.5944939
+    }
+  ]
+}

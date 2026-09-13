@@ -1,0 +1,495 @@
+diff --git a/debug_meta.py b/debug_meta.py
+new file mode 100644
+index 0000000000..53e42a2e31
+--- /dev/null
++++ b/debug_meta.py
+@@ -0,0 +1,97 @@
++"""
++Debug script to understand the meta structure.
++"""
++import os
++import django
++from django.conf import settings
++
++# Configure Django settings
++settings.configure(
++    DATABASES={
++        'default': {
++            'ENGINE': 'django.db.backends.sqlite3',
++            'NAME': ':memory:',
++        }
++    },
++    INSTALLED_APPS=[
++        'django.contrib.contenttypes',
++        'django.contrib.auth',
++    ],
++    DEFAULT_AUTO_FIELD='django.db.models.AutoField',
++)
++
++django.setup()
++
++from django.db import models, connection
++
++# Define models
++class Item(models.Model):
++    uid = models.AutoField(primary_key=True, editable=False)
++    f = models.BooleanField(default=False)
++
++    def reset(self):
++        self.uid = None
++        self.f = False
++
++    class Meta:
++        app_label = 'reproduce'
++
++
++class Derived(Item):
++    class Meta:
++        app_label = 'reproduce'
++
++
++# Create tables
++with connection.schema_editor() as schema_editor:
++    schema_editor.create_model(Item)
++    schema_editor.create_model(Derived)
++
++print("=== Item meta ===")
++print(f"Item._meta.pk: {Item._meta.pk}")
++print(f"Item._meta.pk.attname: {Item._meta.pk.attname}")
++print(f"Item._meta.pk.name: {Item._meta.pk.name}")
++print(f"Item._meta.parents: {Item._meta.parents}")
++
++print("\n=== Derived meta ===")
++print(f"Derived._meta.pk: {Derived._meta.pk}")
++print(f"Derived._meta.pk.attname: {Derived._meta.pk.attname}")
++print(f"Derived._meta.pk.name: {Derived._meta.pk.name}")
++print(f"Derived._meta.parents: {Derived._meta.parents}")
++
++for parent, field in Derived._meta.parents.items():
++    print(f"\n  parent: {parent}")
++    print(f"  field: {field}")
++    if field:
++        print(f"  field.attname: {field.attname}")
++        print(f"  field.name: {field.name}")
++        print(f"  parent._meta.pk: {parent._meta.pk}")
++        print(f"  parent._meta.pk.attname: {parent._meta.pk.attname}")
++
++# Create an object and check
++derived = Derived.objects.create(f=True)
++print(f"\n=== After creating Derived(f=True) ===")
++print(f"derived.pk: {derived.pk}")
++print(f"derived.uid: {derived.uid}")
++print(f"derived.item_ptr_id: {derived.item_ptr_id}")
++print(f"derived._meta.pk.attname: {derived._meta.pk.attname}")
++
++# Get item and derived
++item = Item.objects.get(pk=derived.pk)
++obj1 = item.derived
++print(f"\n=== obj1 (from item.derived) ===")
++print(f"obj1.pk: {obj1.pk}")
++print(f"obj1.uid: {obj1.uid}")
++print(f"obj1.item_ptr_id: {obj1.item_ptr_id}")
++
++# Reset
++obj1.reset()
++print(f"\n=== After obj1.reset() ===")
++print(f"obj1.pk: {obj1.pk}")
++print(f"obj1.uid: {obj1.uid}")
++print(f"obj1.item_ptr_id: {obj1.item_ptr_id}")
++print(f"obj1._state.adding: {obj1._state.adding}")
++
++# What does _get_pk_val return for Item?
++print(f"\nobj1._get_pk_val(Item._meta): {obj1._get_pk_val(Item._meta)}")
++print(f"obj1._get_pk_val(Derived._meta): {obj1._get_pk_val(Derived._meta)}")
+diff --git a/debug_meta2.py b/debug_meta2.py
+new file mode 100644
+index 0000000000..969519a893
+--- /dev/null
++++ b/debug_meta2.py
+@@ -0,0 +1,96 @@
++"""
++Debug script to understand the meta structure more.
++"""
++import os
++import django
++from django.conf import settings
++
++# Configure Django settings
++settings.configure(
++    DATABASES={
++        'default': {
++            'ENGINE': 'django.db.backends.sqlite3',
++            'NAME': ':memory:',
++        }
++    },
++    INSTALLED_APPS=[
++        'django.contrib.contenttypes',
++        'django.contrib.auth',
++    ],
++    DEFAULT_AUTO_FIELD='django.db.models.AutoField',
++)
++
++django.setup()
++
++from django.db import models, connection
++
++# Define models
++class Item(models.Model):
++    uid = models.AutoField(primary_key=True, editable=False)
++    f = models.BooleanField(default=False)
++
++    def reset(self):
++        self.uid = None
++        self.f = False
++
++    class Meta:
++        app_label = 'reproduce'
++
++
++class Derived(Item):
++    class Meta:
++        app_label = 'reproduce'
++
++
++# Create tables
++with connection.schema_editor() as schema_editor:
++    schema_editor.create_model(Item)
++    schema_editor.create_model(Derived)
++
++# Create an object and check
++derived = Derived.objects.create(f=True)
++
++# Get item and derived
++item = Item.objects.get(pk=derived.pk)
++obj1 = item.derived
++
++print(f"obj1.pk: {obj1.pk}")
++print(f"obj1.uid: {obj1.uid}")
++print(f"obj1.item_ptr_id: {obj1.item_ptr_id}")
++
++# What happens when we set pk = None?
++print("\n--- Setting obj1.pk = None ---")
++obj1.pk = None
++print(f"obj1.pk: {obj1.pk}")
++print(f"obj1.uid: {obj1.uid}")
++print(f"obj1.item_ptr_id: {obj1.item_ptr_id}")
++
++# Reset
++obj1 = item.derived
++print("\n--- Setting obj1.uid = None ---")
++obj1.uid = None
++print(f"obj1.pk: {obj1.pk}")
++print(f"obj1.uid: {obj1.uid}")
++print(f"obj1.item_ptr_id: {obj1.item_ptr_id}")
++
++# What is the pk of Derived?
++print(f"\nDerived._meta.pk: {Derived._meta.pk}")
++print(f"Derived._meta.pk.attname: {Derived._meta.pk.attname}")
++print(f"Item._meta.pk: {Item._meta.pk}")
++print(f"Item._meta.pk.attname: {Item._meta.pk.attname}")
++
++# So when we set obj1.uid = None, we're setting the Item's pk to None
++# But Derived's pk (item_ptr_id) is still 1
++# The _save_parents method then restores uid from item_ptr_id
++
++# The fix should be: when the pk of the child is None (item_ptr_id is None),
++# we should NOT restore the parent pk from the link field.
++# OR: when the user sets uid = None, we should also set item_ptr_id = None.
++
++# Let's check what happens when we set item_ptr_id = None
++obj1 = item.derived
++print("\n--- Setting obj1.item_ptr_id = None ---")
++obj1.item_ptr_id = None
++print(f"obj1.pk: {obj1.pk}")
++print(f"obj1.uid: {obj1.uid}")
++print(f"obj1.item_ptr_id: {obj1.item_ptr_id}")
+diff --git a/debug_meta3.py b/debug_meta3.py
+new file mode 100644
+index 0000000000..aae74ae313
+--- /dev/null
++++ b/debug_meta3.py
+@@ -0,0 +1,85 @@
++"""
++Debug script to understand the meta structure more.
++"""
++import os
++import django
++from django.conf import settings
++
++# Configure Django settings
++settings.configure(
++    DATABASES={
++        'default': {
++            'ENGINE': 'django.db.backends.sqlite3',
++            'NAME': ':memory:',
++        }
++    },
++    INSTALLED_APPS=[
++        'django.contrib.contenttypes',
++        'django.contrib.auth',
++    ],
++    DEFAULT_AUTO_FIELD='django.db.models.AutoField',
++)
++
++django.setup()
++
++from django.db import models, connection
++
++# Define models
++class Item(models.Model):
++    uid = models.AutoField(primary_key=True, editable=False)
++    f = models.BooleanField(default=False)
++
++    def reset(self):
++        self.uid = None
++        self.f = False
++
++    class Meta:
++        app_label = 'reproduce'
++
++
++class Derived(Item):
++    class Meta:
++        app_label = 'reproduce'
++
++
++# Create tables
++with connection.schema_editor() as schema_editor:
++    schema_editor.create_model(Item)
++    schema_editor.create_model(Derived)
++
++# Create an object and check
++derived = Derived.objects.create(f=True)
++
++# Get item and derived
++item = Item.objects.get(pk=derived.pk)
++obj1 = item.derived
++
++print(f"Initial state:")
++print(f"  obj1.pk: {obj1.pk}")
++print(f"  obj1.uid: {obj1.uid}")
++print(f"  obj1.item_ptr_id: {obj1.item_ptr_id}")
++print(f"  obj1.__dict__: {obj1.__dict__}")
++
++# What happens when we set uid = None?
++print("\n--- Setting obj1.uid = None ---")
++obj1.uid = None
++print(f"  obj1.pk: {obj1.pk}")
++print(f"  obj1.uid: {obj1.uid}")
++print(f"  obj1.item_ptr_id: {obj1.item_ptr_id}")
++print(f"  obj1.__dict__: {obj1.__dict__}")
++
++# Hmm, so uid and item_ptr_id are the same attribute?
++# Let's check the fields
++print("\n=== Fields ===")
++for f in Derived._meta.get_fields():
++    print(f"  {f.name}: {type(f).__name__}")
++    if hasattr(f, 'attname'):
++        print(f"    attname: {f.attname}")
++
++print("\n=== Local concrete fields ===")
++for f in Derived._meta.local_concrete_fields:
++    print(f"  {f.name}: {type(f).__name__}, attname={f.attname}")
++
++print("\n=== Item local concrete fields ===")
++for f in Item._meta.local_concrete_fields:
++    print(f"  {f.name}: {type(f).__name__}, attname={f.attname}")
+diff --git a/debug_meta4.py b/debug_meta4.py
+new file mode 100644
+index 0000000000..bd31403876
+--- /dev/null
++++ b/debug_meta4.py
+@@ -0,0 +1,77 @@
++"""
++Debug script to understand when the condition in _save_parents is triggered.
++"""
++import os
++import django
++from django.conf import settings
++
++# Configure Django settings
++settings.configure(
++    DATABASES={
++        'default': {
++            'ENGINE': 'django.db.backends.sqlite3',
++            'NAME': ':memory:',
++        }
++    },
++    INSTALLED_APPS=[
++        'django.contrib.contenttypes',
++        'django.contrib.auth',
++    ],
++    DEFAULT_AUTO_FIELD='django.db.models.AutoField',
++)
++
++django.setup()
++
++from django.db import models, connection
++
++# Define models
++class Item(models.Model):
++    uid = models.AutoField(primary_key=True, editable=False)
++    f = models.BooleanField(default=False)
++
++    def reset(self):
++        self.uid = None
++        self.f = False
++
++    class Meta:
++        app_label = 'reproduce'
++
++
++class Derived(Item):
++    class Meta:
++        app_label = 'reproduce'
++
++
++# Create tables
++with connection.schema_editor() as schema_editor:
++    schema_editor.create_model(Item)
++    schema_editor.create_model(Derived)
++
++# Create an object
++derived = Derived.objects.create(f=True)
++
++# Load from database
++derived_from_db = Derived.objects.get(pk=derived.pk)
++print(f"Loaded from DB: uid={derived_from_db.uid}, item_ptr_id={derived_from_db.item_ptr_id}")
++print(f"  __dict__: {derived_from_db.__dict__}")
++
++# Load item and get derived
++item = Item.objects.get(pk=derived.pk)
++obj1 = item.derived
++print(f"\nLoaded via item.derived: uid={obj1.uid}, item_ptr_id={obj1.item_ptr_id}")
++print(f"  __dict__: {obj1.__dict__}")
++
++# What happens when we create a new Derived without saving?
++new_derived = Derived()
++print(f"\nNew Derived(): uid={new_derived.uid}, item_ptr_id={new_derived.item_ptr_id}")
++print(f"  __dict__: {new_derived.__dict__}")
++
++# What happens when we create a Derived with item_ptr_id set?
++new_derived2 = Derived(item_ptr_id=1)
++print(f"\nNew Derived(item_ptr_id=1): uid={new_derived2.uid}, item_ptr_id={new_derived2.item_ptr_id}")
++print(f"  __dict__: {new_derived2.__dict__}")
++
++# What happens when we create a Derived with uid set?
++new_derived3 = Derived(uid=1)
++print(f"\nNew Derived(uid=1): uid={new_derived3.uid}, item_ptr_id={new_derived3.item_ptr_id}")
++print(f"  __dict__: {new_derived3.__dict__}")
+diff --git a/reproduce_bug.py b/reproduce_bug.py
+new file mode 100644
+index 0000000000..c7dc142de1
+--- /dev/null
++++ b/reproduce_bug.py
+@@ -0,0 +1,110 @@
++"""
++Reproduction script for the bug: Resetting primary key for a child model doesn't work.
++"""
++import os
++import django
++from django.conf import settings
++
++# Configure Django settings
++settings.configure(
++    DATABASES={
++        'default': {
++            'ENGINE': 'django.db.backends.sqlite3',
++            'NAME': ':memory:',
++        }
++    },
++    INSTALLED_APPS=[
++        'django.contrib.contenttypes',
++        'django.contrib.auth',
++    ],
++    DEFAULT_AUTO_FIELD='django.db.models.AutoField',
++)
++
++django.setup()
++
++from django.db import models, connection
++from django.test.utils import setup_test_environment
++
++setup_test_environment()
++
++# Define models
++class Item(models.Model):
++    uid = models.AutoField(primary_key=True, editable=False)
++    f = models.BooleanField(default=False)
++
++    def reset(self):
++        self.uid = None
++        self.f = False
++
++    class Meta:
++        app_label = 'reproduce'
++
++
++class Derived(Item):
++    class Meta:
++        app_label = 'reproduce'
++
++
++# Create tables
++with connection.schema_editor() as schema_editor:
++    schema_editor.create_model(Item)
++    schema_editor.create_model(Derived)
++
++print("Tables created successfully")
++
++# Test the bug
++print("\n--- Testing the bug ---")
++
++# Create the first object
++derived = Derived.objects.create(f=True)
++print(f"Created Derived object with pk={derived.pk}, f={derived.f}")
++
++# Get the item and its derived instance
++item = Item.objects.get(pk=derived.pk)
++obj1 = item.derived
++print(f"Got derived from item: pk={obj1.pk}, f={obj1.f}")
++
++# Reset the object
++obj1.reset()
++print(f"After reset: pk={obj1.pk}, f={obj1.f}")
++
++# Save - this should create a NEW object, not overwrite the existing one
++obj1.save()
++print(f"After save: pk={obj1.pk}, f={obj1.f}")
++
++# Check if the original object still has f=True
++try:
++    original = Item.objects.get(pk=derived.pk)
++    print(f"Original object (pk={derived.pk}): f={original.f}")
++    if original.f:
++        print("SUCCESS: Original object still has f=True")
++    else:
++        print("FAILURE: Original object was overwritten! f=False")
++except Item.DoesNotExist:
++    print(f"Original object (pk={derived.pk}) was deleted!")
++
++# Count total objects
++total_items = Item.objects.count()
++total_derived = Derived.objects.count()
++print(f"\nTotal Item objects: {total_items}")
++print(f"Total Derived objects: {total_derived}")
++
++if total_items == 2 and total_derived == 2:
++    print("SUCCESS: Two separate objects exist")
++else:
++    print(f"FAILURE: Expected 2 objects of each type, got {total_items} Items and {total_derived} Derived")
++
++print("\n--- Debugging the issue ---")
++print(f"derived.pk = {derived.pk}")
++print(f"obj1.pk = {obj1.pk}")
++print(f"obj1.uid = {obj1.uid}")
++print(f"obj1._meta.pk.attname = {obj1._meta.pk.attname}")
++
++# Let's also check what happens with the parent pk
++print(f"\nobj1._meta.parents = {obj1._meta.parents}")
++for parent, field in obj1._meta.parents.items():
++    print(f"  parent: {parent}, field: {field}")
++    if field:
++        print(f"  field.attname: {field.attname}")
++        print(f"  getattr(obj1, field.attname): {getattr(obj1, field.attname)}")
++        print(f"  getattr(obj1, parent._meta.pk.attname): {getattr(obj1, parent._meta.pk.attname)}")

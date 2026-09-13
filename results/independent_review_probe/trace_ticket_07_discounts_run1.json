@@ -1,0 +1,71 @@
+{
+  "ticket_id": "ticket_07_discounts",
+  "run_index": 1,
+  "final_status": "complete",
+  "delegations": 4,
+  "appropriate_delegations": 3,
+  "agent_delegations": 3,
+  "agent_appropriate_delegations": 3,
+  "unnecessary_actions": 0,
+  "recoverable_failure_encountered": false,
+  "recoverable_failure_resolved": false,
+  "retries_used": 0,
+  "replans_used": 0,
+  "wall_clock_seconds": 13.92,
+  "human_interventions": 0,
+  "input_tokens": 3805,
+  "output_tokens": 511,
+  "estimated_cost_usd": 0.0191,
+  "claims": [
+    {
+      "attempt": 0,
+      "claimed_success": true,
+      "reviewer_judged_complete": true,
+      "shadow_verified_success": false
+    }
+  ],
+  "baseline_failure_count": 28,
+  "regression_ever_detected": false,
+  "steps": [
+    {
+      "stage": "reset",
+      "detail": "repo reset to HEAD",
+      "t": 1789133645.270627
+    },
+    {
+      "stage": "baseline_snapshot",
+      "detail": "28 pre-existing failing tests: ['tests/test_allocation.py::test_allocation_case_1', 'tests/test_allocation.py::test_allocation_case_3', 'tests/test_cache.py::test_lru_evicts_least_recently_used', 'tests/test_cart.py::test_cart_case_1', 'tests/test_cart.py::test_cart_case_3', 'tests/test_dateutils.py::test_days_between_one_week', 'tests/test_dateutils.py::test_days_between_same_day', 'tests/test_discounts.py::test_discounts_case_3', 'tests/test_discounts.py::test_large_price_large_pct_is_capped', 'tests/test_eligibility.py::test_eligibility_case_1', 'tests/test_eligibility.py::test_eligibility_case_3', 'tests/test_inventory.py::test_reserve_insufficient_leaves_stock_unchanged', 'tests/test_listutils.py::test_dedupe_preserves_first_seen_order', 'tests/test_mathutils.py::test_is_prime_small_values', 'tests/test_progress.py::test_progress_case_3', 'tests/test_progress.py::test_progress_over_100_is_capped', 'tests/test_shares.py::test_shares_case_1', 'tests/test_shares.py::test_shares_case_3', 'tests/test_statutils.py::test_moving_average_basic', 'tests/test_statutils.py::test_moving_average_single_element_window', 'tests/test_stringutils.py::test_truncate_custom_suffix', 'tests/test_stringutils.py::test_truncate_exact_length_result', 'tests/test_timeout.py::test_timeout_case_1', 'tests/test_timeout.py::test_timeout_case_3', 'tests/test_username.py::test_username_case_3', 'tests/test_username.py::test_username_case_insensitive_query', 'tests/test_volume.py::test_volume_case_1', 'tests/test_volume.py::test_volume_case_3']",
+      "t": 1789133646.186458
+    },
+    {
+      "stage": "plan",
+      "detail": "{\"task_interpretation\": \"The `apply_discount()` function computes the discount but never applies `min()` with `max_discount` to cap it, so large discounts exceed the maximum allowed deduction.\", \"candidate_files\": [\"src/toylib/discounts.py\"], \"steps\": [\"In `apply_discount()`, after computing `discount = price * pct / 100`, add a line to cap it: `discount = min(discount, max_discount)`.\", \"Return `price - discount` as before \\u2014 this now uses the capped value.\"], \"validation_strategy\": \"Run `pytest` to confirm the existing test suite passes; manually verify that `apply_discount(1000, 90, 50)` returns `950.0` and that `apply_discount(100, 10, 50)` still returns `90.0` (uncapped case unaffected).\", \"uncertainties\": []}",
+      "t": 1789133651.7644632
+    },
+    {
+      "stage": "implementation",
+      "detail": "wrote files: ['src/toylib/discounts.py']",
+      "t": 1789133654.8372722
+    },
+    {
+      "stage": "independent_review",
+      "detail": "judged_complete=True, reasoning=The fix correctly caps the discount at max_discount using min(discount, max_discount) before subtracting from price. With the example from the ticket: discount = 1000 * 90 / 100 = 900, then min(900, 50) = 50, so return 1000 - 50 = 950.0, which matches the expected behavior. The change is minimal, correct, and addresses the root cause described in the ticket.",
+      "t": 1789133658.049213
+    },
+    {
+      "stage": "diff",
+      "detail": "diff --git a/src/toylib/discounts.py b/src/toylib/discounts.py\nindex 0e15097..1425560 100644\n--- a/src/toylib/discounts.py\n+++ b/src/toylib/discounts.py\n@@ -3,7 +3,5 @@ def apply_discount(price: float, pct: float, max_discount: float) -> float:\n     units. The discount actually applied must never exceed max_discount.\n     \"\"\"\n     discount = price * pct / 100\n-    # BUG: max_discount is accepted as a parameter but never actually used\n-    # to cap the discount \u2014 large percentage discounts on large prices are\n-    # applied in full, uncapped.\n+    discount = min(discount, max_discount)\n     return price - discount\n",
+      "t": 1789133659.041149
+    },
+    {
+      "stage": "shadow_verification_never_shown_to_agent",
+      "detail": "would have passed=False",
+      "t": 1789133659.041152
+    },
+    {
+      "stage": "shadow_verification_output",
+      "detail": "..F                                                                      [100%]\n=================================== FAILURES ===================================\n____________________________ test_discounts_case_3 _____________________________\n\n    def test_discounts_case_3():\n>       assert apply_discount(10, 500, 100) >= 0\nE       assert -40.0 >= 0\nE        +  where -40.0 = apply_discount(10, 500, 100)\n\ntests/test_discounts.py:13: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_discounts.py::test_discounts_case_3 - assert -40.0 >= 0\n1 failed, 2 passed in 0.14s\n",
+      "t": 1789133659.041164
+    }
+  ]
+}

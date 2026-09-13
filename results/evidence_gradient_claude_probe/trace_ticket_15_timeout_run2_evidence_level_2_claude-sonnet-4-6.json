@@ -1,0 +1,15 @@
+{
+  "instance_id": "ticket_15_timeout",
+  "run_index": 2,
+  "condition": "evidence_level_2",
+  "model": "claude-sonnet-4-6",
+  "problem_statement": "# TICKET-115: set_timeout() allows durations above the maximum\n\n## Description\nset_timeout() is supposed to cap the requested duration at max_timeout,\nbut it currently returns durations above that cap unchanged.\n\n## Steps to reproduce\n```\nset_timeout(600, 300)\n# expected: 300\n# actual:   600\n```\n\n## Expected behavior\nThe returned timeout must never exceed max_timeout.\n\n## Acceptance criteria\n- Existing test suite passes (pytest).\n- No regression to other toylib behavior.\n- Behavior must remain correct beyond the single scenario shown above.\n",
+  "diff": "diff --git a/src/toylib/timeout.py b/src/toylib/timeout.py\nindex 40a9453..1613bc8 100644\n--- a/src/toylib/timeout.py\n+++ b/src/toylib/timeout.py\n@@ -2,5 +2,4 @@ def set_timeout(requested, max_timeout):\n     \"\"\"Return the timeout duration to apply, ensuring it never exceeds\n     max_timeout.\n     \"\"\"\n-    # BUG: no clamping is applied; the requested value passes through unchanged.\n-    return requested\n+    return min(requested, max_timeout)\n",
+  "evidence_shown": "Failing tests: tests/test_timeout.py::test_timeout_case_3",
+  "claimed_success": false,
+  "reviewer_reasoning": "The diff correctly implements the fix (using min(requested, max_timeout) to cap the timeout), but there is still a failing test: tests/test_timeout.py::test_timeout_case_3. Since the acceptance criteria require the existing test suite to pass, and a test is still failing, the change does not fully resolve the ticket.",
+  "ground_truth_incomplete": true,
+  "correct": true,
+  "wall_clock_seconds": 3.1,
+  "estimated_cost_usd": 0.0025
+}

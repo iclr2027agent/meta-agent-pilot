@@ -18,7 +18,6 @@ swebench_expansion/repos/
 # Results and logs — regenerable by re-running the harness against the
 # same tasks/tickets; not source. Re-running costs real API/compute time,
 # but nothing here is hand-authored or otherwise irreproducible.
-/results/
 /logs/
 swebench_pilot/logs/
 swebench_expansion/logs/

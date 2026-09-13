@@ -1,0 +1,2010 @@
+2026-09-12 10:28:31,388 - WARNING - swea-lm - Claude 3.7/4 models do not support 128k context by default. Setting max output tokens to 64k. To enable 128k context, please set the completion_kwargs to {'extra_headers': {'anthropic-beta': 'output-128k-2025-02-19'}}.
+2026-09-12 10:28:31,402 - INFO - rex-deploy - Building image docker.io/swebench/sweb.eval.x86_64.django_1776_django-13512:latest to install a standalone python to /root. This might take a while (but you only have to do it once). To skip this step, set `python_standalone_dir` to None.
+2026-09-12 10:31:28,478 - WARNING - swea-lm - Claude 3.7/4 models do not support 128k context by default. Setting max output tokens to 64k. To enable 128k context, please set the completion_kwargs to {'extra_headers': {'anthropic-beta': 'output-128k-2025-02-19'}}.
+2026-09-12 10:31:28,492 - INFO - rex-deploy - Building image docker.io/swebench/sweb.eval.x86_64.django_1776_django-13512:latest to install a standalone python to None. This might take a while (but you only have to do it once). To skip this step, set `python_standalone_dir` to None.
+2026-09-12 10:31:53,386 - WARNING - swea-lm - Claude 3.7/4 models do not support 128k context by default. Setting max output tokens to 64k. To enable 128k context, please set the completion_kwargs to {'extra_headers': {'anthropic-beta': 'output-128k-2025-02-19'}}.
+2026-09-12 10:31:53,399 - INFO - rex-deploy - Starting container docker.ioswebenchsweb.eval.x86_64.django_1776_django-13512latest-c38881bb-cf7f-4dd4-9d5b-8b5a3239165e with image docker.io/swebench/sweb.eval.x86_64.django_1776_django-13512:latest serving on port 61663
+2026-09-12 10:31:53,405 - INFO - rex-deploy - Starting runtime at 61663
+2026-09-12 10:32:11,837 - INFO - rex-deploy - Runtime started in 18.43s
+2026-09-12 10:32:13,053 - INFO - swea-env - Environment Initialized
+2026-09-12 10:32:14,911 - INFO - swea-agent - Setting up agent for instance django__django-13512
+2026-09-12 10:32:14,912 - INFO - swea-agent - Trajectory will be saved to /Users/amir/Downloads/meta_agent_pilot/results/swe_agent_baseline/django__django-13512/django__django-13512.traj
+2026-09-12 10:32:19,223 - INFO - swea-tools - Resetting tools
+2026-09-12 10:32:19,858 - INFO - swea-agent - SYSTEM (main)
+You are a helpful assistant that can interact with a computer to solve tasks.
+2026-09-12 10:32:20,156 - INFO - swea-agent - 🤖 MODEL INPUT
+<uploaded_files>
+/testbed
+</uploaded_files>
+I've uploaded a python code repository in the directory /testbed. Consider the following PR description:
+
+<pr_description>
+Admin doesn't display properly unicode chars in JSONFields.
+Description
+	 
+		(last modified by ZhaoQi99)
+	 
+>>> import json
+>>> print json.dumps('中国')
+"\u4e2d\u56fd"
+json.dumps use ASCII encoding by default when serializing Chinese.
+So when we edit a JsonField which contains Chinese character in Django admin,it will appear in ASCII characters.
+I have try to fix this this problem in ​https://github.com/adamchainz/django-mysql/pull/714.And it works prefectly.
+
+</pr_description>
+
+Can you help me implement the necessary changes to the repository so that the requirements specified in the <pr_description> are met?
+I've already taken care of all changes to any of the test files described in the <pr_description>. This means you DON'T have to modify the testing logic or any of the tests in any way!
+Your task is to make the minimal changes to non-tests files in the /testbed directory to ensure the <pr_description> is satisfied.
+Follow these steps to resolve the issue:
+1. As a first step, it might be a good idea to find and read code relevant to the <pr_description>
+2. Create a script to reproduce the error and execute it with `python <filename.py>` using the bash tool, to confirm the error
+3. Edit the sourcecode of the repo to resolve the issue
+4. Rerun your reproduce script and confirm that the error is fixed!
+5. Think about edgecases and make sure your fix handles them as well
+Your thinking should be thorough and so it's fine if it's very long.
+2026-09-12 10:32:20,161 - INFO - swea-agent - ========================= STEP 1 =========================
+2026-09-12 10:32:20,824 - WARNING - swea-lm - Retrying LM query: attempt 1 (slept for 10.00s) due to BadRequestError: litellm.BadRequestError: AnthropicException - {"type":"error","error":{"type":"invalid_request_error","message":"`temperature` and `top_p` cannot both be specified for this model. Please use only one."},"request_id":"req_011Ceyi2yPhvt8ERSticUrZi"}
+2026-09-12 10:32:31,294 - WARNING - swea-lm - Retrying LM query: attempt 2 (slept for 20.00s) due to BadRequestError: litellm.BadRequestError: AnthropicException - {"type":"error","error":{"type":"invalid_request_error","message":"`temperature` and `top_p` cannot both be specified for this model. Please use only one."},"request_id":"req_011Ceyi3kJvjMj4uEBWdrPE2"}
+2026-09-12 10:32:41,778 - WARNING - swea-lm - Retrying LM query: attempt 3 (slept for 30.00s) due to BadRequestError: litellm.BadRequestError: AnthropicException - {"type":"error","error":{"type":"invalid_request_error","message":"`temperature` and `top_p` cannot both be specified for this model. Please use only one."},"request_id":"req_011Ceyi4XgSKdXNmwUYAWPLs"}
+2026-09-12 10:32:52,266 - WARNING - swea-lm - Retrying LM query: attempt 4 (slept for 40.00s) due to BadRequestError: litellm.BadRequestError: AnthropicException - {"type":"error","error":{"type":"invalid_request_error","message":"`temperature` and `top_p` cannot both be specified for this model. Please use only one."},"request_id":"req_011Ceyi5HoYRmEXGDeR6kRMb"}
+2026-09-12 10:33:22,251 - WARNING - swea-lm - Claude 3.7/4 models do not support 128k context by default. Setting max output tokens to 64k. To enable 128k context, please set the completion_kwargs to {'extra_headers': {'anthropic-beta': 'output-128k-2025-02-19'}}.
+2026-09-12 10:33:22,265 - INFO - rex-deploy - Starting container docker.ioswebenchsweb.eval.x86_64.django_1776_django-13512latest-5ee29725-39ce-4a8f-aefc-7a221f5e6c74 with image docker.io/swebench/sweb.eval.x86_64.django_1776_django-13512:latest serving on port 61881
+2026-09-12 10:33:22,272 - INFO - rex-deploy - Starting runtime at 61881
+2026-09-12 10:33:42,417 - INFO - rex-deploy - Runtime started in 20.14s
+2026-09-12 10:33:43,600 - INFO - swea-env - Environment Initialized
+2026-09-12 10:33:44,964 - INFO - swea-agent - Setting up agent for instance django__django-13512
+2026-09-12 10:33:44,966 - INFO - swea-agent - Trajectory will be saved to /Users/amir/Downloads/meta_agent_pilot/results/swe_agent_baseline/django__django-13512/django__django-13512.traj
+2026-09-12 10:33:49,133 - INFO - swea-tools - Resetting tools
+2026-09-12 10:33:49,785 - INFO - swea-agent - SYSTEM (main)
+You are a helpful assistant that can interact with a computer to solve tasks.
+2026-09-12 10:33:50,081 - INFO - swea-agent - 🤖 MODEL INPUT
+<uploaded_files>
+/testbed
+</uploaded_files>
+I've uploaded a python code repository in the directory /testbed. Consider the following PR description:
+
+<pr_description>
+Admin doesn't display properly unicode chars in JSONFields.
+Description
+	 
+		(last modified by ZhaoQi99)
+	 
+>>> import json
+>>> print json.dumps('中国')
+"\u4e2d\u56fd"
+json.dumps use ASCII encoding by default when serializing Chinese.
+So when we edit a JsonField which contains Chinese character in Django admin,it will appear in ASCII characters.
+I have try to fix this this problem in ​https://github.com/adamchainz/django-mysql/pull/714.And it works prefectly.
+
+</pr_description>
+
+Can you help me implement the necessary changes to the repository so that the requirements specified in the <pr_description> are met?
+I've already taken care of all changes to any of the test files described in the <pr_description>. This means you DON'T have to modify the testing logic or any of the tests in any way!
+Your task is to make the minimal changes to non-tests files in the /testbed directory to ensure the <pr_description> is satisfied.
+Follow these steps to resolve the issue:
+1. As a first step, it might be a good idea to find and read code relevant to the <pr_description>
+2. Create a script to reproduce the error and execute it with `python <filename.py>` using the bash tool, to confirm the error
+3. Edit the sourcecode of the repo to resolve the issue
+4. Rerun your reproduce script and confirm that the error is fixed!
+5. Think about edgecases and make sure your fix handles them as well
+Your thinking should be thorough and so it's fine if it's very long.
+2026-09-12 10:33:50,087 - INFO - swea-agent - ========================= STEP 1 =========================
+2026-09-12 10:34:00,056 - INFO - swea-agent - 💭 THOUGHT
+Let me start by exploring the repository structure to understand the codebase.
+
+🎬 ACTION
+str_replace_editor view /testbed
+2026-09-12 10:34:00,729 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Here's the files and directories up to 2 levels deep in /testbed, excluding hidden items:
+/testbed
+/testbed/CONTRIBUTING.rst
+/testbed/django
+/testbed/django/views
+/testbed/django/dispatch
+/testbed/django/urls
+/testbed/django/apps
+/testbed/django/bin
+/testbed/django/__main__.py
+/testbed/django/forms
+/testbed/django/utils
+/testbed/django/templatetags
+/testbed/django/http
+/testbed/django/shortcuts.py
+/testbed/django/contrib
+/testbed/django/middleware
+/testbed/django/__init__.py
+/testbed/django/test
+/testbed/django/db
+/testbed/django/template
+/testbed/django/__pycache__
+/testbed/django/conf
+/testbed/django/core
+/testbed/setup.cfg
+/testbed/Gruntfile.js
+/testbed/extras
+/testbed/extras/Makefile
+/testbed/extras/django_bash_completion
+/testbed/extras/README.TXT
+/testbed/README.rst
+/testbed/setup.py
+/testbed/Django.egg-info
+/testbed/Django.egg-info/dependency_links.txt
+/testbed/Django.egg-info/requires.txt
+/testbed/Django.egg-info/SOURCES.txt
+/testbed/Django.egg-info/not-zip-safe
+/testbed/Django.egg-info/top_level.txt
+/testbed/Django.egg-info/entry_points.txt
+/testbed/Django.egg-info/PKG-INFO
+/testbed/js_tests
+/testbed/js_tests/tests.html
+/testbed/js_tests/admin
+/testbed/js_tests/gis
+/testbed/tests
+/testbed/tests/handlers
+/testbed/tests/admin_changelist
+/testbed/tests/no_models
+/testbed/tests/admin_ordering
+/testbed/tests/dispatch
+/testbed/tests/many_to_many
+/testbed/tests/db_utils
+/testbed/tests/middleware_exceptions
+/testbed/tests/decorators
+/testbed/tests/string_lookup
+/testbed/tests/get_or_create
+/testbed/tests/cache
+/testbed/tests/admin_widgets
+/testbed/tests/invalid_models_tests
+/testbed/tests/dbshell
+/testbed/tests/delete
+/testbed/tests/custom_columns
+/testbed/tests/async
+/testbed/tests/utils_tests
+/testbed/tests/str
+/testbed/tests/admin_scripts
+/testbed/tests/validation
+/testbed/tests/managers_regress
+/testbed/tests/update
+/testbed/tests/i18n
+/testbed/tests/apps
+/testbed/tests/generic_inline_admin
+/testbed/tests/signing
+/testbed/tests/asgi
+/testbed/tests/db_typecasts
+/testbed/tests/syndication_tests
+/testbed/tests/settings_tests
+/testbed/tests/expressions_case
+/testbed/tests/servers
+/testbed/tests/pagination
+/testbed/tests/prefetch_related
+/testbed/tests/m2m_intermediary
+/testbed/tests/expressions
+/testbed/tests/files
+/testbed/tests/README.rst
+/testbed/tests/multiple_database
+/testbed/tests/gis_tests
+/testbed/tests/max_lengths
+/testbed/tests/model_inheritance
+/testbed/tests/admin_default_site
+/testbed/tests/project_template
+/testbed/tests/inline_formsets
+/testbed/tests/admin_checks
+/testbed/tests/filtered_relation
+/testbed/tests/raw_query
+/testbed/tests/model_inheritance_regress
+/testbed/tests/m2m_and_m2o
+/testbed/tests/dates
+/testbed/tests/bash_completion
+/testbed/tests/test_runner_apps
+/testbed/tests/custom_migration_operations
+/testbed/tests/user_commands
+/testbed/tests/db_functions
+/testbed/tests/urlpatterns_reverse
+/testbed/tests/custom_managers
+/testbed/tests/m2m_through
+/testbed/tests/conditional_processing
+/testbed/tests/unmanaged_models
+/testbed/tests/m2m_recursive
+/testbed/tests/swappable_models
+/testbed/tests/empty_models
+/testbed/tests/field_deconstruction
+/testbed/tests/csrf_tests
+/testbed/tests/select_for_update
+/testbed/tests/get_earliest_or_latest
+/testbed/tests/known_related_objects
+/testbed/tests/absolute_url_overrides
+/testbed/tests/inspectdb
+/testbed/tests/admin_filters
+/testbed/tests/ordering
+/testbed/tests/test_client
+/testbed/tests/order_with_respect_to
+/testbed/tests/select_related
+/testbed/tests/model_formsets_regress
+/testbed/tests/test_runner
+/testbed/tests/m2m_through_regress
+/testbed/tests/runtests.py
+/testbed/tests/builtin_server
+/testbed/tests/model_fields
+/testbed/tests/templates
+/testbed/tests/generic_relations
+/testbed/tests/nested_foreign_keys
+/testbed/tests/custom_lookups
+/testbed/tests/app_loading
+/testbed/tests/schema
+/testbed/tests/version
+/testbed/tests/defer_regress
+/testbed/tests/properties
+/testbed/tests/forms_tests
+/testbed/tests/import_error_package
+/testbed/tests/sites_tests
+/testbed/tests/m2o_recursive
+/testbed/tests/sessions_tests
+/testbed/tests/auth_tests
+/testbed/tests/custom_pk
+/testbed/tests/check_framework
+/testbed/tests/test_utils
+/testbed/tests/reverse_lookup
+/testbed/tests/reserved_names
+/testbed/tests/logging_tests
+/testbed/tests/postgres_tests
+/testbed/tests/migrations2
+/testbed/tests/shell
+/testbed/tests/null_fk_ordering
+/testbed/tests/empty
+/testbed/tests/delete_regress
+/testbed/tests/httpwrappers
+/testbed/tests/model_meta
+/testbed/tests/constraints
+/testbed/tests/aggregation_regress
+/testbed/tests/one_to_one
+/testbed/tests/test_client_regress
+/testbed/tests/force_insert_update
+/testbed/tests/middleware
+/testbed/tests/mutually_referential
+/testbed/tests/template_loader
+/testbed/tests/model_indexes
+/testbed/tests/model_regress
+/testbed/tests/annotations
+/testbed/tests/migrate_signals
+/testbed/tests/serializers
+/testbed/tests/shortcuts
+/testbed/tests/admin_docs
+/testbed/tests/basic
+/testbed/tests/timezones
+/testbed/tests/aggregation
+/testbed/tests/custom_methods
+/testbed/tests/urlpatterns
+/testbed/tests/null_queries
+/testbed/tests/contenttypes_tests
+/testbed/tests/generic_views
+/testbed/tests/m2m_regress
+/testbed/tests/admin_registration
+/testbed/tests/admin_autodiscover
+/testbed/tests/transactions
+/testbed/tests/file_uploads
+/testbed/tests/humanize_tests
+/testbed/tests/signals
+/testbed/tests/many_to_one
+/testbed/tests/model_forms
+/testbed/tests/null_fk
+/testbed/tests/admin_utils
+/testbed/tests/sitemaps_tests
+/testbed/tests/deprecation
+/testbed/tests/validators
+/testbed/tests/context_processors
+/testbed/tests/template_backends
+/testbed/tests/save_delete_hooks
+/testbed/tests/admin_views
+/testbed/tests/generic_relations_regress
+/testbed/tests/queryset_pickle
+/testbed/tests/indexes
+/testbed/tests/bulk_create
+/testbed/tests/fixtures_regress
+/testbed/tests/select_related_regress
+/testbed/tests/expressions_window
+/testbed/tests/m2m_signals
+/testbed/tests/admin_custom_urls
+/testbed/tests/signed_cookies_tests
+/testbed/tests/wsgi
+/testbed/tests/template_tests
+/testbed/tests/test_sqlite.py
+/testbed/tests/sites_framework
+/testbed/tests/foreign_object
+/testbed/tests/test_exceptions
+/testbed/tests/fixtures_model_package
+/testbed/tests/messages_tests
+/testbed/tests/admin_inlines
+/testbed/tests/model_package
+/testbed/tests/distinct_on_fields
+/testbed/tests/field_defaults
+/testbed/tests/responses
+/testbed/tests/model_formsets
+/testbed/tests/redirects_tests
+/testbed/tests/model_options
+/testbed/tests/introspection
+/testbed/tests/datetimes
+/testbed/tests/mail
+/testbed/tests/backends
+/testbed/tests/or_lookups
+/testbed/tests/requests
+/testbed/tests/migration_test_data_persistence
+/testbed/tests/base
+/testbed/tests/datatypes
+/testbed/tests/requirements
+/testbed/tests/staticfiles_tests
+/testbed/tests/fixtures
+/testbed/tests/from_db_value
+/testbed/tests/urls.py
+/testbed/tests/defer
+/testbed/tests/proxy_models
+/testbed/tests/view_tests
+/testbed/tests/queries
+/testbed/tests/many_to_one_null
+/testbed/tests/m2m_multiple
+/testbed/tests/get_object_or_404
+/testbed/tests/migrations
+/testbed/tests/modeladmin
+/testbed/tests/resolve_url
+/testbed/tests/update_only_fields
+/testbed/tests/flatpages_tests
+/testbed/tests/model_enums
+/testbed/tests/file_storage
+/testbed/tests/proxy_model_inheritance
+/testbed/tests/field_subclassing
+/testbed/tests/extra_regress
+/testbed/tests/lookup
+/testbed/tests/select_related_onetoone
+/testbed/tests/transaction_hooks
+/testbed/scripts
+/testbed/scripts/rpm-install.sh
+/testbed/scripts/manage_translations.py
+/testbed/LICENSE.python
+/testbed/AUTHORS
+/testbed/package.json
+/testbed/LICENSE
+/testbed/MANIFEST.in
+/testbed/tox.ini
+/testbed/docs
+/testbed/docs/misc
+/testbed/docs/howto
+/testbed/docs/README.rst
+/testbed/docs/spelling_wordlist
+/testbed/docs/glossary.txt
+/testbed/docs/intro
+/testbed/docs/releases
+/testbed/docs/topics
+/testbed/docs/ref
+/testbed/docs/internals
+/testbed/docs/_theme
+/testbed/docs/contents.txt
+/testbed/docs/_ext
+/testbed/docs/conf.py
+/testbed/docs/make.bat
+/testbed/docs/faq
+/testbed/docs/man
+/testbed/docs/Makefile
+/testbed/docs/index.txt
+/testbed/INSTALL
+
+
+
+2026-09-12 10:34:00,737 - INFO - swea-agent - ========================= STEP 2 =========================
+2026-09-12 10:34:10,215 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+find /testbed -name "*.py" | xargs grep -l "JSONField\|json_field\|jsonfield" 2>/dev/null | grep -v __pycache__ | head -30
+2026-09-12 10:34:10,785 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+/testbed/django/forms/fields.py
+/testbed/django/contrib/admin/utils.py
+/testbed/django/contrib/postgres/forms/jsonb.py
+/testbed/django/contrib/postgres/aggregates/general.py
+/testbed/django/contrib/postgres/fields/jsonb.py
+/testbed/django/db/models/functions/comparison.py
+/testbed/django/db/models/fields/json.py
+/testbed/django/db/models/__init__.py
+/testbed/django/db/backends/mysql/introspection.py
+/testbed/django/db/backends/mysql/features.py
+/testbed/django/db/backends/mysql/base.py
+/testbed/django/db/backends/mysql/operations.py
+/testbed/django/db/backends/oracle/introspection.py
+/testbed/django/db/backends/oracle/features.py
+/testbed/django/db/backends/oracle/base.py
+/testbed/django/db/backends/oracle/operations.py
+/testbed/django/db/backends/postgresql/introspection.py
+/testbed/django/db/backends/postgresql/features.py
+/testbed/django/db/backends/postgresql/base.py
+/testbed/django/db/backends/sqlite3/introspection.py
+/testbed/django/db/backends/sqlite3/features.py
+/testbed/django/db/backends/sqlite3/base.py
+/testbed/django/db/backends/base/features.py
+/testbed/django/core/serializers/xml_serializer.py
+/testbed/tests/invalid_models_tests/test_ordinary_fields.py
+/testbed/tests/invalid_models_tests/test_models.py
+/testbed/tests/inspectdb/models.py
+/testbed/tests/inspectdb/tests.py
+/testbed/tests/model_fields/models.py
+/testbed/tests/model_fields/test_jsonfield.py
+
+2026-09-12 10:34:10,787 - INFO - swea-agent - ========================= STEP 3 =========================
+2026-09-12 10:34:13,801 - WARNING - swea-agent - Requerying model after FunctionCallingFormatError (1th requery)
+2026-09-12 10:34:13,804 - WARNING - swea-agent - Your last output included multiple tool calls!
+Please make sure your output includes a thought and exactly _ONE_ function call.
+2026-09-12 10:34:18,047 - INFO - swea-agent - 💭 THOUGHT
+Let me start by exploring the relevant files for JSONField.
+
+🎬 ACTION
+str_replace_editor view /testbed/django/db/models/fields/json.py
+2026-09-12 10:34:18,687 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+<NOTE>This file is too large to display entirely. Showing abbreviated version. Please use `str_replace_editor view` with the `view_range` parameter to show selected lines next.</NOTE>
+     1 import json
+     2 
+     3 from django import forms
+     4 from django.core import checks, exceptions
+     5 from django.db import NotSupportedError, connections, router
+     6 from django.db.models import lookups
+     7 from django.db.models.lookups import PostgresOperatorLookup, Transform
+     8 from django.utils.translation import gettext_lazy as _
+     9 
+    10 from . import Field
+    11 from .mixins import CheckFieldDefaultMixin
+    12 
+    13 __all__ = ['JSONField']
+    14 
+    15 
+    16 class JSONField(CheckFieldDefaultMixin, Field):
+    17     empty_strings_allowed = False
+    18     description = _('A JSON object')
+    19     default_error_messages = {
+    20         'invalid': _('Value must be valid JSON.'),
+    21     }
+    22     _default_hint = ('dict', '{}')
+    23 
+    24     def __init__(
+    25         self, verbose_name=None, name=None, encoder=None, decoder=None,
+    26         **kwargs,
+    27     ):
+    28 ... eliding lines 28-34 ...
+    35 
+    36     def check(self, **kwargs):
+    37         errors = super().check(**kwargs)
+    38         databases = kwargs.get('databases') or []
+    39         errors.extend(self._check_supported(databases))
+    40         return errors
+    41 
+    42     def _check_supported(self, databases):
+    43 ... eliding lines 43-60 ...
+    61 
+    62     def deconstruct(self):
+    63 ... eliding lines 63-68 ...
+    69 
+    70     def from_db_value(self, value, expression, connection):
+    71 ... eliding lines 71-76 ...
+    77 
+    78     def get_internal_type(self):
+    79         return 'JSONField'
+    80 
+    81     def get_prep_value(self, value):
+    82         if value is None:
+    83             return value
+    84         return json.dumps(value, cls=self.encoder)
+    85 
+    86     def get_transform(self, name):
+    87         transform = super().get_transform(name)
+    88         if transform:
+    89             return transform
+    90         return KeyTransformFactory(name)
+    91 
+    92     def validate(self, value, model_instance):
+    93 ... eliding lines 93-101 ...
+   102 
+   103     def value_to_string(self, obj):
+   104         return self.value_from_object(obj)
+   105 
+   106     def formfield(self, **kwargs):
+   107 ... eliding lines 107-112 ...
+   113 
+   114 
+   115 def compile_json_path(key_transforms, include_root=True):
+   116 ... eliding lines 116-125 ...
+   126 
+   127 
+   128 class DataContains(PostgresOperatorLookup):
+   129     lookup_name = 'contains'
+   130     postgres_operator = '@>'
+   131 
+   132     def as_sql(self, compiler, connection):
+   133 ... eliding lines 133-140 ...
+   141 
+   142 
+   143 class ContainedBy(PostgresOperatorLookup):
+   144     lookup_name = 'contained_by'
+   145     postgres_operator = '<@'
+   146 
+   147     def as_sql(self, compiler, connection):
+   148 ... eliding lines 148-155 ...
+   156 
+   157 
+   158 class HasKeyLookup(PostgresOperatorLookup):
+   159     logical_operator = None
+   160 
+   161     def as_sql(self, compiler, connection, template=None):
+   162         # Process JSON path from the left-hand side.
+   163 ... eliding lines 163-187 ...
+   188 
+   189     def as_mysql(self, compiler, connection):
+   190         return self.as_sql(compiler, connection, template="JSON_CONTAINS_PATH(%s, 'one', %%s)")
+   191 
+   192     def as_oracle(self, compiler, connection):
+   193         sql, params = self.as_sql(compiler, connection, template="JSON_EXISTS(%s, '%%s')")
+   194         # Add paths directly into SQL because path expressions cannot be passed
+   195         # as bind variables on Oracle.
+   196         return sql % tuple(params), []
+   197 
+   198     def as_postgresql(self, compiler, connection):
+   199 ... eliding lines 199-204 ...
+   205 
+   206     def as_sqlite(self, compiler, connection):
+   207         return self.as_sql(compiler, connection, template='JSON_TYPE(%s, %%s) IS NOT NULL')
+   208 
+   209 
+   210 class HasKey(HasKeyLookup):
+   211     lookup_name = 'has_key'
+   212     postgres_operator = '?'
+   213     prepare_rhs = False
+   214 
+   215 
+   216 class HasKeys(HasKeyLookup):
+   217     lookup_name = 'has_keys'
+   218     postgres_operator = '?&'
+   219     logical_operator = ' AND '
+   220 
+   221     def get_prep_lookup(self):
+   222         return [str(item) for item in self.rhs]
+   223 
+   224 
+   225 class HasAnyKeys(HasKeys):
+   226     lookup_name = 'has_any_keys'
+   227     postgres_operator = '?|'
+   228     logical_operator = ' OR '
+   229 
+   230 
+   231 class JSONExact(lookups.Exact):
+   232     can_use_none_as_rhs = True
+   233 
+   234     def process_lhs(self, compiler, connection):
+   235 ... eliding lines 235-241 ...
+   242 
+   243     def process_rhs(self, compiler, connection):
+   244 ... eliding lines 244-251 ...
+   252 
+   253 
+   254 JSONField.register_lookup(DataContains)
+   255 JSONField.register_lookup(ContainedBy)
+   256 JSONField.register_lookup(HasKey)
+   257 JSONField.register_lookup(HasKeys)
+   258 JSONField.register_lookup(HasAnyKeys)
+   259 JSONField.register_lookup(JSONExact)
+   260 
+   261 
+   262 class KeyTransform(Transform):
+   263     postgres_operator = '->'
+   264     postgres_nested_operator = '#>'
+   265 
+   266     def __init__(self, key_name, *args, **kwargs):
+   267         super().__init__(*args, **kwargs)
+   268         self.key_name = str(key_name)
+   269 
+   270     def preprocess_lhs(self, compiler, connection, lhs_only=False):
+   271 ... eliding lines 271-282 ...
+   283 
+   284     def as_mysql(self, compiler, connection):
+   285         lhs, params, key_transforms = self.preprocess_lhs(compiler, connection)
+   286         json_path = compile_json_path(key_transforms)
+   287         return 'JSON_EXTRACT(%s, %%s)' % lhs, tuple(params) + (json_path,)
+   288 
+   289     def as_oracle(self, compiler, connection):
+   290 ... eliding lines 290-295 ...
+   296 
+   297     def as_postgresql(self, compiler, connection):
+   298 ... eliding lines 298-305 ...
+   306 
+   307     def as_sqlite(self, compiler, connection):
+   308         lhs, params, key_transforms = self.preprocess_lhs(compiler, connection)
+   309         json_path = compile_json_path(key_transforms)
+   310         return 'JSON_EXTRACT(%s, %%s)' % lhs, tuple(params) + (json_path,)
+   311 
+   312 
+   313 class KeyTextTransform(KeyTransform):
+   314     postgres_operator = '->>'
+   315     postgres_nested_operator = '#>>'
+   316 
+   317 
+   318 class KeyTransformTextLookupMixin:
+   319     """
+   320     Mixin for combining with a lookup expecting a text lhs from a JSONField
+   321     key lookup. On PostgreSQL, make use of the ->> operator instead of casting
+   322     key values to text and performing the lookup on the resulting
+   323     representation.
+   324     """
+   325     def __init__(self, key_transform, *args, **kwargs):
+   326 ... eliding lines 326-335 ...
+   336 
+   337 
+   338 class CaseInsensitiveMixin:
+   339     """
+   340     Mixin to allow case-insensitive comparison of JSON values on MySQL.
+   341     MySQL handles strings used in JSON context using the utf8mb4_bin collation.
+   342     Because utf8mb4_bin is a binary collation, comparison of JSON values is
+   343     case-sensitive.
+   344     """
+   345     def process_lhs(self, compiler, connection):
+   346         lhs, lhs_params = super().process_lhs(compiler, connection)
+   347         if connection.vendor == 'mysql':
+   348             return 'LOWER(%s)' % lhs, lhs_params
+   349         return lhs, lhs_params
+   350 
+   351     def process_rhs(self, compiler, connection):
+   352         rhs, rhs_params = super().process_rhs(compiler, connection)
+   353         if connection.vendor == 'mysql':
+   354             return 'LOWER(%s)' % rhs, rhs_params
+   355         return rhs, rhs_params
+   356 
+   357 
+   358 class KeyTransformIsNull(lookups.IsNull):
+   359     # key__isnull=False is the same as has_key='key'
+   360     def as_oracle(self, compiler, connection):
+   361         if not self.rhs:
+   362             return HasKey(self.lhs.lhs, self.lhs.key_name).as_oracle(compiler, connection)
+   363         return super().as_sql(compiler, connection)
+   364 
+   365     def as_sqlite(self, compiler, connection):
+   366         if not self.rhs:
+   367             return HasKey(self.lhs.lhs, self.lhs.key_name).as_sqlite(compiler, connection)
+   368         return super().as_sql(compiler, connection)
+   369 
+   370 
+   371 class KeyTransformIn(lookups.In):
+   372     def process_rhs(self, compiler, connection):
+   373 ... eliding lines 373-392 ...
+   393 
+   394 
+   395 class KeyTransformExact(JSONExact):
+   396     def process_lhs(self, compiler, connection):
+   397 ... eliding lines 397-403 ...
+   404 
+   405     def process_rhs(self, compiler, connection):
+   406 ... eliding lines 406-423 ...
+   424 
+   425     def as_oracle(self, compiler, connection):
+   426 ... eliding lines 426-437 ...
+   438 
+   439 
+   440 class KeyTransformIExact(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IExact):
+   441     pass
+   442 
+   443 
+   444 class KeyTransformIContains(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IContains):
+   445     pass
+   446 
+   447 
+   448 class KeyTransformStartsWith(KeyTransformTextLookupMixin, lookups.StartsWith):
+   449     pass
+   450 
+   451 
+   452 class KeyTransformIStartsWith(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IStartsWith):
+   453     pass
+   454 
+   455 
+   456 class KeyTransformEndsWith(KeyTransformTextLookupMixin, lookups.EndsWith):
+   457     pass
+   458 
+   459 
+   460 class KeyTransformIEndsWith(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IEndsWith):
+   461     pass
+   462 
+   463 
+   464 class KeyTransformRegex(KeyTransformTextLookupMixin, lookups.Regex):
+   465     pass
+   466 
+   467 
+   468 class KeyTransformIRegex(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IRegex):
+   469     pass
+   470 
+   471 
+   472 class KeyTransformNumericLookupMixin:
+   473     def process_rhs(self, compiler, connection):
+   474         rhs, rhs_params = super().process_rhs(compiler, connection)
+   475         if not connection.features.has_native_json_field:
+   476             rhs_params = [json.loads(value) for value in rhs_params]
+   477         return rhs, rhs_params
+   478 
+   479 
+   480 class KeyTransformLt(KeyTransformNumericLookupMixin, lookups.LessThan):
+   481     pass
+   482 
+   483 
+   484 class KeyTransformLte(KeyTransformNumericLookupMixin, lookups.LessThanOrEqual):
+   485     pass
+   486 
+   487 
+   488 class KeyTransformGt(KeyTransformNumericLookupMixin, lookups.GreaterThan):
+   489     pass
+   490 
+   491 
+   492 class KeyTransformGte(KeyTransformNumericLookupMixin, lookups.GreaterThanOrEqual):
+   493     pass
+   494 
+   495 
+   496 KeyTransform.register_lookup(KeyTransformIn)
+   497 KeyTransform.register_lookup(KeyTransformExact)
+   498 KeyTransform.register_lookup(KeyTransformIExact)
+   499 KeyTransform.register_lookup(KeyTransformIsNull)
+   500 KeyTransform.register_lookup(KeyTransformIContains)
+   501 KeyTransform.register_lookup(KeyTransformStartsWith)
+   502 KeyTransform.register_lookup(KeyTransformIStartsWith)
+   503 KeyTransform.register_lookup(KeyTransformEndsWith)
+   504 KeyTransform.register_lookup(KeyTransformIEndsWith)
+   505 KeyTransform.register_lookup(KeyTransformRegex)
+   506 KeyTransform.register_lookup(KeyTransformIRegex)
+   507 
+   508 KeyTransform.register_lookup(KeyTransformLt)
+   509 KeyTransform.register_lookup(KeyTransformLte)
+   510 KeyTransform.register_lookup(KeyTransformGt)
+   511 KeyTransform.register_lookup(KeyTransformGte)
+   512 
+   513 
+   514 class KeyTransformFactory:
+   515 
+   516     def __init__(self, key_name):
+   517         self.key_name = key_name
+   518 
+   519     def __call__(self, *args, **kwargs):
+   520         return KeyTransform(self.key_name, *args, **kwargs)
+<IMPORTANT><NOTE>The above file has been abbreviated. Please use `str_replace editor view` with `view_range` to look at relevant files in detail.</NOTE></IMPORTANT>
+
+2026-09-12 10:34:18,704 - INFO - swea-agent - ========================= STEP 5 =========================
+2026-09-12 10:34:21,416 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+str_replace_editor view /testbed/django/forms/fields.py  --view_range 1 50
+2026-09-12 10:34:21,993 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Here's the result of running `cat -n` on /testbed/django/forms/fields.py:
+     1	"""
+     2	Field classes.
+     3	"""
+     4	
+     5	import copy
+     6	import datetime
+     7	import json
+     8	import math
+     9	import operator
+    10	import os
+    11	import re
+    12	import uuid
+    13	from decimal import Decimal, DecimalException
+    14	from io import BytesIO
+    15	from urllib.parse import urlsplit, urlunsplit
+    16	
+    17	from django.core import validators
+    18	from django.core.exceptions import ValidationError
+    19	from django.forms.boundfield import BoundField
+    20	from django.forms.utils import from_current_timezone, to_current_timezone
+    21	from django.forms.widgets import (
+    22	    FILE_INPUT_CONTRADICTION, CheckboxInput, ClearableFileInput, DateInput,
+    23	    DateTimeInput, EmailInput, FileInput, HiddenInput, MultipleHiddenInput,
+    24	    NullBooleanSelect, NumberInput, Select, SelectMultiple,
+    25	    SplitDateTimeWidget, SplitHiddenDateTimeWidget, Textarea, TextInput,
+    26	    TimeInput, URLInput,
+    27	)
+    28	from django.utils import formats
+    29	from django.utils.dateparse import parse_datetime, parse_duration
+    30	from django.utils.duration import duration_string
+    31	from django.utils.ipv6 import clean_ipv6_address
+    32	from django.utils.regex_helper import _lazy_re_compile
+    33	from django.utils.translation import gettext_lazy as _, ngettext_lazy
+    34	
+    35	__all__ = (
+    36	    'Field', 'CharField', 'IntegerField',
+    37	    'DateField', 'TimeField', 'DateTimeField', 'DurationField',
+    38	    'RegexField', 'EmailField', 'FileField', 'ImageField', 'URLField',
+    39	    'BooleanField', 'NullBooleanField', 'ChoiceField', 'MultipleChoiceField',
+    40	    'ComboField', 'MultiValueField', 'FloatField', 'DecimalField',
+    41	    'SplitDateTimeField', 'GenericIPAddressField', 'FilePathField',
+    42	    'JSONField', 'SlugField', 'TypedChoiceField', 'TypedMultipleChoiceField',
+    43	    'UUIDField',
+    44	)
+    45	
+    46	
+    47	class Field:
+    48	    widget = TextInput  # Default widget to use when rendering this type of Field.
+    49	    hidden_widget = HiddenInput  # Default widget to use when rendering this as "hidden".
+    50	    default_validators = []  # Default set of validators
+
+
+2026-09-12 10:34:22,001 - INFO - swea-agent - ========================= STEP 6 =========================
+2026-09-12 10:34:23,975 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+grep -n "JSONField\|json.dumps\|ensure_ascii" /testbed/django/forms/fields.py
+2026-09-12 10:34:24,493 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+42:    'JSONField', 'SlugField', 'TypedChoiceField', 'TypedMultipleChoiceField',
+1219:class JSONField(CharField):
+1261:        return json.dumps(value, cls=self.encoder)
+1269:            json.dumps(initial, sort_keys=True, cls=self.encoder) !=
+1270:            json.dumps(self.to_python(data), sort_keys=True, cls=self.encoder)
+
+2026-09-12 10:34:24,501 - INFO - swea-agent - ========================= STEP 7 =========================
+2026-09-12 10:34:26,433 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+str_replace_editor view /testbed/django/forms/fields.py  --view_range 1219 1280
+2026-09-12 10:34:27,061 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Invalid `view_range`: [1219, 1280]. Its second element `1280` should be smaller than the number of lines in the file: `1272`
+
+2026-09-12 10:34:27,065 - INFO - swea-agent - ========================= STEP 8 =========================
+2026-09-12 10:34:29,022 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+str_replace_editor view /testbed/django/forms/fields.py  --view_range 1219 1272
+2026-09-12 10:34:29,610 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Here's the result of running `cat -n` on /testbed/django/forms/fields.py:
+  1219	class JSONField(CharField):
+  1220	    default_error_messages = {
+  1221	        'invalid': _('Enter a valid JSON.'),
+  1222	    }
+  1223	    widget = Textarea
+  1224	
+  1225	    def __init__(self, encoder=None, decoder=None, **kwargs):
+  1226	        self.encoder = encoder
+  1227	        self.decoder = decoder
+  1228	        super().__init__(**kwargs)
+  1229	
+  1230	    def to_python(self, value):
+  1231	        if self.disabled:
+  1232	            return value
+  1233	        if value in self.empty_values:
+  1234	            return None
+  1235	        elif isinstance(value, (list, dict, int, float, JSONString)):
+  1236	            return value
+  1237	        try:
+  1238	            converted = json.loads(value, cls=self.decoder)
+  1239	        except json.JSONDecodeError:
+  1240	            raise ValidationError(
+  1241	                self.error_messages['invalid'],
+  1242	                code='invalid',
+  1243	                params={'value': value},
+  1244	            )
+  1245	        if isinstance(converted, str):
+  1246	            return JSONString(converted)
+  1247	        else:
+  1248	            return converted
+  1249	
+  1250	    def bound_data(self, data, initial):
+  1251	        if self.disabled:
+  1252	            return initial
+  1253	        try:
+  1254	            return json.loads(data, cls=self.decoder)
+  1255	        except json.JSONDecodeError:
+  1256	            return InvalidJSONInput(data)
+  1257	
+  1258	    def prepare_value(self, value):
+  1259	        if isinstance(value, InvalidJSONInput):
+  1260	            return value
+  1261	        return json.dumps(value, cls=self.encoder)
+  1262	
+  1263	    def has_changed(self, initial, data):
+  1264	        if super().has_changed(initial, data):
+  1265	            return True
+  1266	        # For purposes of seeing whether something has changed, True isn't the
+  1267	        # same as 1 and the order of keys doesn't matter.
+  1268	        return (
+  1269	            json.dumps(initial, sort_keys=True, cls=self.encoder) !=
+  1270	            json.dumps(self.to_python(data), sort_keys=True, cls=self.encoder)
+  1271	        )
+  1272	
+
+
+2026-09-12 10:34:29,624 - INFO - swea-agent - ========================= STEP 9 =========================
+2026-09-12 10:34:33,303 - INFO - swea-agent - 💭 THOUGHT
+Now I can see the issue. In `prepare_value`, `json.dumps` is called without `ensure_ascii=False`, which means non-ASCII characters (like Chinese characters) will be escaped to `\uXXXX` format. Let me also check the postgres JSONField form:
+
+🎬 ACTION
+str_replace_editor view /testbed/django/contrib/postgres/forms/jsonb.py
+2026-09-12 10:34:33,890 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Here's the result of running `cat -n` on /testbed/django/contrib/postgres/forms/jsonb.py:
+     1	import warnings
+     2	
+     3	from django.forms import JSONField as BuiltinJSONField
+     4	from django.utils.deprecation import RemovedInDjango40Warning
+     5	
+     6	__all__ = ['JSONField']
+     7	
+     8	
+     9	class JSONField(BuiltinJSONField):
+    10	    def __init__(self, *args, **kwargs):
+    11	        warnings.warn(
+    12	            'django.contrib.postgres.forms.JSONField is deprecated in favor '
+    13	            'of django.forms.JSONField.',
+    14	            RemovedInDjango40Warning, stacklevel=2,
+    15	        )
+    16	        super().__init__(*args, **kwargs)
+    17	
+
+
+2026-09-12 10:34:33,903 - INFO - swea-agent - ========================= STEP 10 =========================
+2026-09-12 10:34:35,869 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+str_replace_editor view /testbed/django/contrib/postgres/fields/jsonb.py
+2026-09-12 10:34:36,478 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Here's the result of running `cat -n` on /testbed/django/contrib/postgres/fields/jsonb.py:
+     1	import warnings
+     2	
+     3	from django.db.models import JSONField as BuiltinJSONField
+     4	from django.db.models.fields.json import (
+     5	    KeyTextTransform as BuiltinKeyTextTransform,
+     6	    KeyTransform as BuiltinKeyTransform,
+     7	)
+     8	from django.utils.deprecation import RemovedInDjango40Warning
+     9	
+    10	__all__ = ['JSONField']
+    11	
+    12	
+    13	class JSONField(BuiltinJSONField):
+    14	    system_check_deprecated_details = {
+    15	        'msg': (
+    16	            'django.contrib.postgres.fields.JSONField is deprecated. Support '
+    17	            'for it (except in historical migrations) will be removed in '
+    18	            'Django 4.0.'
+    19	        ),
+    20	        'hint': 'Use django.db.models.JSONField instead.',
+    21	        'id': 'fields.W904',
+    22	    }
+    23	
+    24	
+    25	class KeyTransform(BuiltinKeyTransform):
+    26	    def __init__(self, *args, **kwargs):
+    27	        warnings.warn(
+    28	            'django.contrib.postgres.fields.jsonb.KeyTransform is deprecated '
+    29	            'in favor of django.db.models.fields.json.KeyTransform.',
+    30	            RemovedInDjango40Warning, stacklevel=2,
+    31	        )
+    32	        super().__init__(*args, **kwargs)
+    33	
+    34	
+    35	class KeyTextTransform(BuiltinKeyTextTransform):
+    36	    def __init__(self, *args, **kwargs):
+    37	        warnings.warn(
+    38	            'django.contrib.postgres.fields.jsonb.KeyTextTransform is '
+    39	            'deprecated in favor of '
+    40	            'django.db.models.fields.json.KeyTextTransform.',
+    41	            RemovedInDjango40Warning, stacklevel=2,
+    42	        )
+    43	        super().__init__(*args, **kwargs)
+    44	
+
+
+2026-09-12 10:34:36,487 - INFO - swea-agent - ========================= STEP 11 =========================
+2026-09-12 10:34:39,218 - INFO - swea-agent - 💭 THOUGHT
+Now let me look at the test file for JSONField to understand what tests exist:
+
+🎬 ACTION
+str_replace_editor view /testbed/tests/model_fields/test_jsonfield.py  --view_range 1 100
+2026-09-12 10:34:39,817 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Here's the result of running `cat -n` on /testbed/tests/model_fields/test_jsonfield.py:
+     1	import operator
+     2	import uuid
+     3	from unittest import mock, skipIf
+     4	
+     5	from django import forms
+     6	from django.core import serializers
+     7	from django.core.exceptions import ValidationError
+     8	from django.core.serializers.json import DjangoJSONEncoder
+     9	from django.db import (
+    10	    DataError, IntegrityError, NotSupportedError, OperationalError, connection,
+    11	    models,
+    12	)
+    13	from django.db.models import Count, F, OuterRef, Q, Subquery, Transform, Value
+    14	from django.db.models.expressions import RawSQL
+    15	from django.db.models.fields.json import (
+    16	    KeyTextTransform, KeyTransform, KeyTransformFactory,
+    17	    KeyTransformTextLookupMixin,
+    18	)
+    19	from django.db.models.functions import Cast
+    20	from django.test import (
+    21	    SimpleTestCase, TestCase, skipIfDBFeature, skipUnlessDBFeature,
+    22	)
+    23	from django.test.utils import CaptureQueriesContext
+    24	
+    25	from .models import CustomJSONDecoder, JSONModel, NullableJSONModel
+    26	
+    27	
+    28	@skipUnlessDBFeature('supports_json_field')
+    29	class JSONFieldTests(TestCase):
+    30	    def test_invalid_value(self):
+    31	        msg = 'is not JSON serializable'
+    32	        with self.assertRaisesMessage(TypeError, msg):
+    33	            NullableJSONModel.objects.create(value={
+    34	                'uuid': uuid.UUID('d85e2076-b67c-4ee7-8c3a-2bf5a2cc2475'),
+    35	            })
+    36	
+    37	    def test_custom_encoder_decoder(self):
+    38	        value = {'uuid': uuid.UUID('{d85e2076-b67c-4ee7-8c3a-2bf5a2cc2475}')}
+    39	        obj = NullableJSONModel(value_custom=value)
+    40	        obj.clean_fields()
+    41	        obj.save()
+    42	        obj.refresh_from_db()
+    43	        self.assertEqual(obj.value_custom, value)
+    44	
+    45	    def test_db_check_constraints(self):
+    46	        value = '{@!invalid json value 123 $!@#'
+    47	        with mock.patch.object(DjangoJSONEncoder, 'encode', return_value=value):
+    48	            with self.assertRaises((IntegrityError, DataError, OperationalError)):
+    49	                NullableJSONModel.objects.create(value_custom=value)
+    50	
+    51	
+    52	class TestMethods(SimpleTestCase):
+    53	    def test_deconstruct(self):
+    54	        field = models.JSONField()
+    55	        name, path, args, kwargs = field.deconstruct()
+    56	        self.assertEqual(path, 'django.db.models.JSONField')
+    57	        self.assertEqual(args, [])
+    58	        self.assertEqual(kwargs, {})
+    59	
+    60	    def test_deconstruct_custom_encoder_decoder(self):
+    61	        field = models.JSONField(encoder=DjangoJSONEncoder, decoder=CustomJSONDecoder)
+    62	        name, path, args, kwargs = field.deconstruct()
+    63	        self.assertEqual(kwargs['encoder'], DjangoJSONEncoder)
+    64	        self.assertEqual(kwargs['decoder'], CustomJSONDecoder)
+    65	
+    66	    def test_get_transforms(self):
+    67	        @models.JSONField.register_lookup
+    68	        class MyTransform(Transform):
+    69	            lookup_name = 'my_transform'
+    70	        field = models.JSONField()
+    71	        transform = field.get_transform('my_transform')
+    72	        self.assertIs(transform, MyTransform)
+    73	        models.JSONField._unregister_lookup(MyTransform)
+    74	        models.JSONField._clear_cached_lookups()
+    75	        transform = field.get_transform('my_transform')
+    76	        self.assertIsInstance(transform, KeyTransformFactory)
+    77	
+    78	    def test_key_transform_text_lookup_mixin_non_key_transform(self):
+    79	        transform = Transform('test')
+    80	        msg = (
+    81	            'Transform should be an instance of KeyTransform in order to use '
+    82	            'this lookup.'
+    83	        )
+    84	        with self.assertRaisesMessage(TypeError, msg):
+    85	            KeyTransformTextLookupMixin(transform)
+    86	
+    87	
+    88	class TestValidation(SimpleTestCase):
+    89	    def test_invalid_encoder(self):
+    90	        msg = 'The encoder parameter must be a callable object.'
+    91	        with self.assertRaisesMessage(ValueError, msg):
+    92	            models.JSONField(encoder=DjangoJSONEncoder())
+    93	
+    94	    def test_invalid_decoder(self):
+    95	        msg = 'The decoder parameter must be a callable object.'
+    96	        with self.assertRaisesMessage(ValueError, msg):
+    97	            models.JSONField(decoder=CustomJSONDecoder())
+    98	
+    99	    def test_validation_error(self):
+   100	        field = models.JSONField()
+
+
+2026-09-12 10:34:39,837 - INFO - swea-agent - ========================= STEP 12 =========================
+2026-09-12 10:34:42,508 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+grep -n "prepare_value\|ensure_ascii\|unicode\|Chinese\|中国\|has_changed" /testbed/tests/model_fields/test_jsonfield.py | head -30
+2026-09-12 10:34:43,014 - INFO - swea-agent - 🤖 MODEL INPUT
+Your command ran successfully and did not produce any output.
+2026-09-12 10:34:43,025 - INFO - swea-agent - ========================= STEP 13 =========================
+2026-09-12 10:34:44,990 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+grep -n "prepare_value\|ensure_ascii\|unicode\|Chinese\|中国\|has_changed" /testbed/tests/forms_tests/field_tests/test_jsonfield.py 2>/dev/null | head -30
+2026-09-12 10:34:45,494 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+27:    def test_prepare_value(self):
+29:        self.assertEqual(field.prepare_value({'a': 'b'}), '{"a": "b"}')
+30:        self.assertEqual(field.prepare_value(None), 'null')
+31:        self.assertEqual(field.prepare_value('foo'), '"foo"')
+66:    def test_has_changed(self):
+68:        self.assertIs(field.has_changed({'a': True}, '{"a": 1}'), True)
+69:        self.assertIs(field.has_changed({'a': 1, 'b': 2}, '{"b": 2, "a": 1}'), False)
+84:        self.assertEqual(field.prepare_value(value), encoded_value)
+
+2026-09-12 10:34:45,509 - INFO - swea-agent - ========================= STEP 14 =========================
+2026-09-12 10:34:47,498 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+str_replace_editor view /testbed/tests/forms_tests/field_tests/test_jsonfield.py
+2026-09-12 10:34:48,089 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Here's the result of running `cat -n` on /testbed/tests/forms_tests/field_tests/test_jsonfield.py:
+     1	import json
+     2	import uuid
+     3	
+     4	from django.core.serializers.json import DjangoJSONEncoder
+     5	from django.forms import (
+     6	    CharField, Form, JSONField, Textarea, TextInput, ValidationError,
+     7	)
+     8	from django.test import SimpleTestCase
+     9	
+    10	
+    11	class JSONFieldTest(SimpleTestCase):
+    12	    def test_valid(self):
+    13	        field = JSONField()
+    14	        value = field.clean('{"a": "b"}')
+    15	        self.assertEqual(value, {'a': 'b'})
+    16	
+    17	    def test_valid_empty(self):
+    18	        field = JSONField(required=False)
+    19	        self.assertIsNone(field.clean(''))
+    20	        self.assertIsNone(field.clean(None))
+    21	
+    22	    def test_invalid(self):
+    23	        field = JSONField()
+    24	        with self.assertRaisesMessage(ValidationError, 'Enter a valid JSON.'):
+    25	            field.clean('{some badly formed: json}')
+    26	
+    27	    def test_prepare_value(self):
+    28	        field = JSONField()
+    29	        self.assertEqual(field.prepare_value({'a': 'b'}), '{"a": "b"}')
+    30	        self.assertEqual(field.prepare_value(None), 'null')
+    31	        self.assertEqual(field.prepare_value('foo'), '"foo"')
+    32	
+    33	    def test_widget(self):
+    34	        field = JSONField()
+    35	        self.assertIsInstance(field.widget, Textarea)
+    36	
+    37	    def test_custom_widget_kwarg(self):
+    38	        field = JSONField(widget=TextInput)
+    39	        self.assertIsInstance(field.widget, TextInput)
+    40	
+    41	    def test_custom_widget_attribute(self):
+    42	        """The widget can be overridden with an attribute."""
+    43	        class CustomJSONField(JSONField):
+    44	            widget = TextInput
+    45	
+    46	        field = CustomJSONField()
+    47	        self.assertIsInstance(field.widget, TextInput)
+    48	
+    49	    def test_converted_value(self):
+    50	        field = JSONField(required=False)
+    51	        tests = [
+    52	            '["a", "b", "c"]',
+    53	            '{"a": 1, "b": 2}',
+    54	            '1',
+    55	            '1.5',
+    56	            '"foo"',
+    57	            'true',
+    58	            'false',
+    59	            'null',
+    60	        ]
+    61	        for json_string in tests:
+    62	            with self.subTest(json_string=json_string):
+    63	                val = field.clean(json_string)
+    64	                self.assertEqual(field.clean(val), val)
+    65	
+    66	    def test_has_changed(self):
+    67	        field = JSONField()
+    68	        self.assertIs(field.has_changed({'a': True}, '{"a": 1}'), True)
+    69	        self.assertIs(field.has_changed({'a': 1, 'b': 2}, '{"b": 2, "a": 1}'), False)
+    70	
+    71	    def test_custom_encoder_decoder(self):
+    72	        class CustomDecoder(json.JSONDecoder):
+    73	            def __init__(self, object_hook=None, *args, **kwargs):
+    74	                return super().__init__(object_hook=self.as_uuid, *args, **kwargs)
+    75	
+    76	            def as_uuid(self, dct):
+    77	                if 'uuid' in dct:
+    78	                    dct['uuid'] = uuid.UUID(dct['uuid'])
+    79	                return dct
+    80	
+    81	        value = {'uuid': uuid.UUID('{c141e152-6550-4172-a784-05448d98204b}')}
+    82	        encoded_value = '{"uuid": "c141e152-6550-4172-a784-05448d98204b"}'
+    83	        field = JSONField(encoder=DjangoJSONEncoder, decoder=CustomDecoder)
+    84	        self.assertEqual(field.prepare_value(value), encoded_value)
+    85	        self.assertEqual(field.clean(encoded_value), value)
+    86	
+    87	    def test_formfield_disabled(self):
+    88	        class JSONForm(Form):
+    89	            json_field = JSONField(disabled=True)
+    90	
+    91	        form = JSONForm({'json_field': '["bar"]'}, initial={'json_field': ['foo']})
+    92	        self.assertIn('[&quot;foo&quot;]</textarea>', form.as_p())
+    93	
+    94	    def test_redisplay_wrong_input(self):
+    95	        """
+    96	        Displaying a bound form (typically due to invalid input). The form
+    97	        should not overquote JSONField inputs.
+    98	        """
+    99	        class JSONForm(Form):
+   100	            name = CharField(max_length=2)
+   101	            json_field = JSONField()
+   102	
+   103	        # JSONField input is valid, name is too long.
+   104	        form = JSONForm({'name': 'xyz', 'json_field': '["foo"]'})
+   105	        self.assertNotIn('json_field', form.errors)
+   106	        self.assertIn('[&quot;foo&quot;]</textarea>', form.as_p())
+   107	        # Invalid JSONField.
+   108	        form = JSONForm({'name': 'xy', 'json_field': '{"foo"}'})
+   109	        self.assertEqual(form.errors['json_field'], ['Enter a valid JSON.'])
+   110	        self.assertIn('{&quot;foo&quot;}</textarea>', form.as_p())
+   111	
+
+
+2026-09-12 10:34:48,113 - INFO - swea-agent - ========================= STEP 15 =========================
+2026-09-12 10:34:57,588 - INFO - swea-agent - 💭 THOUGHT
+Now let me create a script to reproduce the issue:
+
+🎬 ACTION
+str_replace_editor create /testbed/reproduce_issue.py --file_text '"""
+Script to reproduce the issue where JSONField doesn'"'"'t display unicode chars properly.
+"""
+import json
+import sys
+import os
+
+# Add the testbed to the path
+sys.path.insert(0, '"'"'/testbed'"'"')
+
+# Setup Django
+os.environ.setdefault('"'"'DJANGO_SETTINGS_MODULE'"'"', '"'"'tests.test_sqlite'"'"')
+
+import django
+django.setup()
+
+from django.forms import JSONField
+
+# Test with Chinese characters
+field = JSONField()
+
+# Test data with Chinese characters
+chinese_data = {'"'"'name'"'"': '"'"'中国'"'"', '"'"'city'"'"': '"'"'北京'"'"'}
+
+# prepare_value is what'"'"'s used to display the value in the admin form
+prepared = field.prepare_value(chinese_data)
+print(f"prepare_value result: {prepared}")
+print(f"Expected: {json.dumps(chinese_data, ensure_ascii=False)}")
+print(f"Are they equal? {prepared == json.dumps(chinese_data, ensure_ascii=False)}")
+print()
+
+# Check if Chinese characters are escaped
+if '"'"'\\u'"'"' in prepared:
+    print("BUG: Chinese characters are being escaped to ASCII!")
+    print(f"Got: {prepared}")
+    print(f"Expected: {json.dumps(chinese_data, ensure_ascii=False)}")
+else:
+    print("OK: Chinese characters are displayed properly")
+
+print()
+
+# Test with a simple string
+string_data = '"'"'中国'"'"'
+prepared_string = field.prepare_value(string_data)
+print(f"prepare_value for string '"'"'中国'"'"': {prepared_string}")
+if '"'"'\\u'"'"' in prepared_string:
+    print("BUG: Chinese characters in string are being escaped to ASCII!")
+else:
+    print("OK: Chinese characters in string are displayed properly")
+'
+2026-09-12 10:34:58,174 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+File created successfully at: /testbed/reproduce_issue.py
+
+2026-09-12 10:34:58,186 - INFO - swea-agent - ========================= STEP 16 =========================
+2026-09-12 10:34:59,902 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+cd /testbed && python reproduce_issue.py
+2026-09-12 10:35:00,845 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+prepare_value result: {"name": "\u4e2d\u56fd", "city": "\u5317\u4eac"}
+Expected: {"name": "中国", "city": "北京"}
+Are they equal? False
+
+BUG: Chinese characters are being escaped to ASCII!
+Got: {"name": "\u4e2d\u56fd", "city": "\u5317\u4eac"}
+Expected: {"name": "中国", "city": "北京"}
+
+prepare_value for string '中国': "\u4e2d\u56fd"
+BUG: Chinese characters in string are being escaped to ASCII!
+
+2026-09-12 10:35:00,866 - INFO - swea-agent - ========================= STEP 17 =========================
+2026-09-12 10:35:04,098 - INFO - swea-agent - 💭 THOUGHT
+The bug is confirmed. Now let me fix it by adding `ensure_ascii=False` to the `json.dumps` calls in the `prepare_value` method of the `JSONField` form field:
+
+🎬 ACTION
+str_replace_editor view /testbed/django/forms/fields.py  --view_range 1258 1272
+2026-09-12 10:35:04,688 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Here's the result of running `cat -n` on /testbed/django/forms/fields.py:
+  1258	    def prepare_value(self, value):
+  1259	        if isinstance(value, InvalidJSONInput):
+  1260	            return value
+  1261	        return json.dumps(value, cls=self.encoder)
+  1262	
+  1263	    def has_changed(self, initial, data):
+  1264	        if super().has_changed(initial, data):
+  1265	            return True
+  1266	        # For purposes of seeing whether something has changed, True isn't the
+  1267	        # same as 1 and the order of keys doesn't matter.
+  1268	        return (
+  1269	            json.dumps(initial, sort_keys=True, cls=self.encoder) !=
+  1270	            json.dumps(self.to_python(data), sort_keys=True, cls=self.encoder)
+  1271	        )
+  1272	
+
+
+2026-09-12 10:35:04,710 - INFO - swea-agent - ========================= STEP 18 =========================
+2026-09-12 10:35:12,777 - INFO - swea-agent - 💭 THOUGHT
+The fix needs to be applied to `prepare_value` - this is the method that converts the Python value to a string for display in the form. The `has_changed` method uses `json.dumps` for comparison purposes only (not for display), so it doesn't need `ensure_ascii=False` for correctness (both sides would be encoded the same way). However, for consistency, let me check if there's any reason to change `has_changed` too.
+
+Looking at `has_changed`: it compares `json.dumps(initial, ...)` with `json.dumps(self.to_python(data), ...)`. Since both sides use the same encoding, the comparison will work correctly regardless of `ensure_ascii`. So the main fix needed is in `prepare_value`.
+
+Now let me apply the fix:
+
+🎬 ACTION
+str_replace_editor str_replace /testbed/django/forms/fields.py   --old_str '    def prepare_value(self, value):
+        if isinstance(value, InvalidJSONInput):
+            return value
+        return json.dumps(value, cls=self.encoder)' --new_str '    def prepare_value(self, value):
+        if isinstance(value, InvalidJSONInput):
+            return value
+        return json.dumps(value, ensure_ascii=False, cls=self.encoder)'
+2026-09-12 10:35:13,378 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+The file /testbed/django/forms/fields.py has been edited. Here's the result of running `cat -n` on a snippet of /testbed/django/forms/fields.py:
+  1253	        try:
+  1254	            return json.loads(data, cls=self.decoder)
+  1255	        except json.JSONDecodeError:
+  1256	            return InvalidJSONInput(data)
+  1257	
+  1258	    def prepare_value(self, value):
+  1259	        if isinstance(value, InvalidJSONInput):
+  1260	            return value
+  1261	        return json.dumps(value, ensure_ascii=False, cls=self.encoder)
+  1262	
+  1263	    def has_changed(self, initial, data):
+  1264	        if super().has_changed(initial, data):
+Review the changes and make sure they are as expected. Edit the file again if necessary.
+
+2026-09-12 10:35:13,398 - INFO - swea-agent - ========================= STEP 19 =========================
+2026-09-12 10:35:15,620 - INFO - swea-agent - 💭 THOUGHT
+Now let's run the reproduction script again to confirm the fix:
+
+🎬 ACTION
+cd /testbed && python reproduce_issue.py
+2026-09-12 10:35:16,349 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+prepare_value result: {"name": "中国", "city": "北京"}
+Expected: {"name": "中国", "city": "北京"}
+Are they equal? True
+
+OK: Chinese characters are displayed properly
+
+prepare_value for string '中国': "中国"
+OK: Chinese characters in string are displayed properly
+
+2026-09-12 10:35:16,374 - INFO - swea-agent - ========================= STEP 20 =========================
+2026-09-12 10:35:19,131 - INFO - swea-agent - 💭 THOUGHT
+The fix works. Now let's run the existing tests to make sure nothing is broken:
+
+🎬 ACTION
+cd /testbed && python -m pytest tests/forms_tests/field_tests/test_jsonfield.py -v 2>&1
+2026-09-12 10:35:19,670 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+/opt/miniconda3/envs/testbed/bin/python: No module named pytest
+
+2026-09-12 10:35:19,695 - INFO - swea-agent - ========================= STEP 21 =========================
+2026-09-12 10:35:21,904 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+cd /testbed && python -m django test tests.forms_tests.field_tests.test_jsonfield --settings=tests.test_sqlite 2>&1
+2026-09-12 10:35:22,807 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+System check identified no issues (0 silenced).
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.016s
+
+OK
+
+2026-09-12 10:35:22,836 - INFO - swea-agent - ========================= STEP 22 =========================
+2026-09-12 10:35:25,172 - INFO - swea-agent - 💭 THOUGHT
+All existing tests pass. Let me also run the model_fields JSONField tests:
+
+🎬 ACTION
+cd /testbed && python -m django test tests.model_fields.test_jsonfield --settings=tests.test_sqlite 2>&1
+2026-09-12 10:35:25,979 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/testbed/lib/python3.6/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/opt/miniconda3/envs/testbed/lib/python3.6/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/testbed/django/__main__.py", line 9, in <module>
+    management.execute_from_command_line()
+  File "/testbed/django/core/management/__init__.py", line 405, in execute_from_command_line
+    utility.execute()
+  File "/testbed/django/core/management/__init__.py", line 399, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/testbed/django/core/management/commands/test.py", line 23, in run_from_argv
+    super().run_from_argv(argv)
+  File "/testbed/django/core/management/base.py", line 350, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/testbed/django/core/management/base.py", line 394, in execute
+    output = self.handle(*args, **options)
+  File "/testbed/django/core/management/commands/test.py", line 55, in handle
+    failures = test_runner.run_tests(test_labels)
+  File "/testbed/django/test/runner.py", line 714, in run_tests
+    suite = self.build_suite(test_labels, extra_tests)
+  File "/testbed/django/test/runner.py", line 571, in build_suite
+    tests = self.test_loader.loadTestsFromName(label)
+  File "/opt/miniconda3/envs/testbed/lib/python3.6/unittest/loader.py", line 153, in loadTestsFromName
+    module = __import__(module_name)
+  File "/testbed/tests/model_fields/test_jsonfield.py", line 25, in <module>
+    from .models import CustomJSONDecoder, JSONModel, NullableJSONModel
+  File "/testbed/tests/model_fields/models.py", line 6, in <module>
+    from django.contrib.contenttypes.fields import (
+  File "/testbed/django/contrib/contenttypes/fields.py", line 6, in <module>
+    from django.contrib.contenttypes.models import ContentType
+  File "/testbed/django/contrib/contenttypes/models.py", line 133, in <module>
+    class ContentType(models.Model):
+  File "/testbed/django/db/models/base.py", line 116, in __new__
+    "INSTALLED_APPS." % (module, name)
+RuntimeError: Model class django.contrib.contenttypes.models.ContentType doesn't declare an explicit app_label and isn't in an application in INSTALLED_APPS.
+
+2026-09-12 10:35:26,006 - INFO - swea-agent - ========================= STEP 23 =========================
+2026-09-12 10:35:28,050 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+cd /testbed/tests && python runtests.py model_fields.test_jsonfield --settings=test_sqlite 2>&1 | tail -20
+2026-09-12 10:35:29,387 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Cloning test database for alias 'default'...
+Cloning test database for alias 'default'...
+Cloning test database for alias 'default'...
+Cloning test database for alias 'default'...
+Cloning test database for alias 'default'...
+Cloning test database for alias 'default'...
+Cloning test database for alias 'default'...
+......................ss.sss.s................s.........s.....................
+----------------------------------------------------------------------
+Ran 78 tests in 0.133s
+
+OK (skipped=8)
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+
+2026-09-12 10:35:29,420 - INFO - swea-agent - ========================= STEP 24 =========================
+2026-09-12 10:35:31,960 - INFO - swea-agent - 💭 THOUGHT
+All tests pass. Let me also run the forms_tests to make sure:
+
+🎬 ACTION
+cd /testbed/tests && python runtests.py forms_tests.field_tests.test_jsonfield --settings=test_sqlite 2>&1 | tail -10
+2026-09-12 10:35:32,796 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.010s
+
+OK
+Testing against Django installed in '/testbed/django' with up to 12 processes
+System check identified no issues (0 silenced).
+
+2026-09-12 10:35:32,829 - INFO - swea-agent - ========================= STEP 25 =========================
+2026-09-12 10:35:35,229 - INFO - swea-agent - 💭 THOUGHT
+Let me also think about edge cases. The `ensure_ascii=False` parameter in `prepare_value` is the right fix. Let me also check if there are any other places in the codebase where similar issues might exist:
+
+🎬 ACTION
+grep -n "json.dumps" /testbed/django/forms/fields.py
+2026-09-12 10:35:35,760 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+1261:        return json.dumps(value, ensure_ascii=False, cls=self.encoder)
+1269:            json.dumps(initial, sort_keys=True, cls=self.encoder) !=
+1270:            json.dumps(self.to_python(data), sort_keys=True, cls=self.encoder)
+
+2026-09-12 10:35:35,787 - INFO - swea-agent - ========================= STEP 26 =========================
+2026-09-12 10:35:54,090 - INFO - swea-agent - 💭 THOUGHT
+The `has_changed` method uses `json.dumps` for comparison purposes only - both sides are encoded the same way, so the comparison is still valid. However, let me think about whether `ensure_ascii=False` should also be added there for consistency.
+
+Looking at `has_changed`:
+- It compares `json.dumps(initial, sort_keys=True, cls=self.encoder)` with `json.dumps(self.to_python(data), sort_keys=True, cls=self.encoder)`
+- Both sides use the same encoding, so the comparison is correct regardless of `ensure_ascii`
+- The `data` comes from the form submission (which would be the raw string from the textarea), and `to_python` parses it back to Python objects
+- The comparison is purely for equality checking, not for display
+
+So `has_changed` doesn't need `ensure_ascii=False` for correctness. The fix to `prepare_value` is the minimal and correct change.
+
+Let me also verify the fix handles all the edge cases mentioned in the PR description:
+
+🎬 ACTION
+str_replace_editor create /testbed/test_edge_cases.py --file_text '"""
+Test edge cases for the JSONField unicode fix.
+"""
+import json
+import sys
+import os
+
+sys.path.insert(0, '"'"'/testbed'"'"')
+os.environ.setdefault('"'"'DJANGO_SETTINGS_MODULE'"'"', '"'"'tests.test_sqlite'"'"')
+
+import django
+django.setup()
+
+from django.forms import JSONField
+from django.forms.fields import InvalidJSONInput
+
+field = JSONField()
+
+print("=== Edge Case Tests ===\n")
+
+# Test 1: Chinese characters in dict
+chinese_dict = {'"'"'name'"'"': '"'"'中国'"'"', '"'"'city'"'"': '"'"'北京'"'"'}
+result = field.prepare_value(chinese_dict)
+print(f"Test 1 - Chinese dict: {result}")
+assert '"'"'\\u'"'"' not in result, f"FAIL: Got escaped unicode: {result}"
+print("PASS\n")
+
+# Test 2: Chinese characters in list
+chinese_list = ['"'"'中国'"'"', '"'"'北京'"'"', '"'"'上海'"'"']
+result = field.prepare_value(chinese_list)
+print(f"Test 2 - Chinese list: {result}")
+assert '"'"'\\u'"'"' not in result, f"FAIL: Got escaped unicode: {result}"
+print("PASS\n")
+
+# Test 3: Chinese characters as string
+chinese_str = '"'"'中国'"'"'
+result = field.prepare_value(chinese_str)
+print(f"Test 3 - Chinese string: {result}")
+assert '"'"'\\u'"'"' not in result, f"FAIL: Got escaped unicode: {result}"
+print("PASS\n")
+
+# Test 4: Mixed ASCII and unicode
+mixed = {'"'"'english'"'"': '"'"'hello'"'"', '"'"'chinese'"'"': '"'"'你好'"'"', '"'"'number'"'"': 42}
+result = field.prepare_value(mixed)
+print(f"Test 4 - Mixed: {result}")
+assert '"'"'\\u'"'"' not in result, f"FAIL: Got escaped unicode: {result}"
+print("PASS\n")
+
+# Test 5: InvalidJSONInput should be returned as-is
+invalid = InvalidJSONInput('"'"'invalid json'"'"')
+result = field.prepare_value(invalid)
+print(f"Test 5 - InvalidJSONInput: {result}")
+assert result is invalid, "FAIL: InvalidJSONInput should be returned as-is"
+print("PASS\n")
+
+# Test 6: None value
+result = field.prepare_value(None)
+print(f"Test 6 - None: {result}")
+assert result == '"'"'null'"'"', f"FAIL: Expected '"'"'null'"'"', got {result}"
+print("PASS\n")
+
+# Test 7: Regular ASCII dict (should still work)
+ascii_dict = {'"'"'a'"'"': '"'"'b'"'"', '"'"'c'"'"': 1}
+result = field.prepare_value(ascii_dict)
+print(f"Test 7 - ASCII dict: {result}")
+assert result == '"'"'{"a": "b", "c": 1}'"'"', f"FAIL: Got {result}"
+print("PASS\n")
+
+# Test 8: Japanese characters
+japanese = {'"'"'greeting'"'"': '"'"'こんにちは'"'"'}
+result = field.prepare_value(japanese)
+print(f"Test 8 - Japanese: {result}")
+assert '"'"'\\u'"'"' not in result, f"FAIL: Got escaped unicode: {result}"
+print("PASS\n")
+
+# Test 9: Arabic characters
+arabic = {'"'"'text'"'"': '"'"'مرحبا'"'"'}
+result = field.prepare_value(arabic)
+print(f"Test 9 - Arabic: {result}")
+assert '"'"'\\u'"'"' not in result, f"FAIL: Got escaped unicode: {result}"
+print("PASS\n")
+
+# Test 10: has_changed still works correctly with unicode
+field2 = JSONField()
+# Same data, different representation
+initial = {'"'"'name'"'"': '"'"'中国'"'"'}
+data = '"'"'{"name": "中国"}'"'"'
+changed = field2.has_changed(initial, data)
+print(f"Test 10 - has_changed with same unicode data: {changed}")
+assert changed == False, f"FAIL: has_changed should return False for same data, got {changed}"
+print("PASS\n")
+
+# Test 11: has_changed detects actual changes
+initial = {'"'"'name'"'"': '"'"'中国'"'"'}
+data = '"'"'{"name": "日本"}'"'"'
+changed = field2.has_changed(initial, data)
+print(f"Test 11 - has_changed with different unicode data: {changed}")
+assert changed == True, f"FAIL: has_changed should return True for different data, got {changed}"
+print("PASS\n")
+
+print("=== All edge case tests passed! ===")
+'
+2026-09-12 10:35:54,702 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+File created successfully at: /testbed/test_edge_cases.py
+
+2026-09-12 10:35:54,739 - INFO - swea-agent - ========================= STEP 27 =========================
+2026-09-12 10:35:56,270 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+cd /testbed && python test_edge_cases.py
+2026-09-12 10:35:56,997 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+=== Edge Case Tests ===
+
+Test 1 - Chinese dict: {"name": "中国", "city": "北京"}
+PASS
+
+Test 2 - Chinese list: ["中国", "北京", "上海"]
+PASS
+
+Test 3 - Chinese string: "中国"
+PASS
+
+Test 4 - Mixed: {"english": "hello", "chinese": "你好", "number": 42}
+PASS
+
+Test 5 - InvalidJSONInput: invalid json
+PASS
+
+Test 6 - None: null
+PASS
+
+Test 7 - ASCII dict: {"a": "b", "c": 1}
+PASS
+
+Test 8 - Japanese: {"greeting": "こんにちは"}
+PASS
+
+Test 9 - Arabic: {"text": "مرحبا"}
+PASS
+
+Test 10 - has_changed with same unicode data: False
+PASS
+
+Test 11 - has_changed with different unicode data: True
+PASS
+
+=== All edge case tests passed! ===
+
+2026-09-12 10:35:57,028 - INFO - swea-agent - ========================= STEP 28 =========================
+2026-09-12 10:35:59,962 - INFO - swea-agent - 💭 THOUGHT
+All edge cases pass. Let me run the full test suite one more time to make sure everything is working:
+
+🎬 ACTION
+cd /testbed/tests && python runtests.py forms_tests model_fields.test_jsonfield --settings=test_sqlite 2>&1 | tail -15
+2026-09-12 10:36:01,785 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+
+OK (skipped=9)
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+Destroying test database for alias 'default'...
+
+2026-09-12 10:36:01,825 - INFO - swea-agent - ========================= STEP 29 =========================
+2026-09-12 10:36:04,420 - INFO - swea-agent - 💭 THOUGHT
+All tests pass. Let me view the final state of the fix:
+
+🎬 ACTION
+str_replace_editor view /testbed/django/forms/fields.py  --view_range 1258 1272
+2026-09-12 10:36:05,005 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Here's the result of running `cat -n` on /testbed/django/forms/fields.py:
+  1258	    def prepare_value(self, value):
+  1259	        if isinstance(value, InvalidJSONInput):
+  1260	            return value
+  1261	        return json.dumps(value, ensure_ascii=False, cls=self.encoder)
+  1262	
+  1263	    def has_changed(self, initial, data):
+  1264	        if super().has_changed(initial, data):
+  1265	            return True
+  1266	        # For purposes of seeing whether something has changed, True isn't the
+  1267	        # same as 1 and the order of keys doesn't matter.
+  1268	        return (
+  1269	            json.dumps(initial, sort_keys=True, cls=self.encoder) !=
+  1270	            json.dumps(self.to_python(data), sort_keys=True, cls=self.encoder)
+  1271	        )
+  1272	
+
+
+2026-09-12 10:36:05,027 - INFO - swea-agent - ========================= STEP 30 =========================
+2026-09-12 10:36:10,926 - WARNING - swea-agent - Requerying model after FunctionCallingFormatError (1th requery)
+2026-09-12 10:36:10,929 - WARNING - swea-agent - Your last output did not use any tool calls!
+Please make sure your output includes exactly _ONE_ function call!
+You must invoke the function directly using the function call format.
+You cannot invoke commands with ```, you have to use the function call format.
+If you think you have already resolved the issue, please submit your changes by running the `submit` command.
+If you think you cannot solve the problem, please run `exit_forfeit` (if available) or `submit`.
+Else, please continue with a new tool call!
+2026-09-12 10:36:12,257 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+submit
+2026-09-12 10:36:13,040 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+Thank you for your work on this issue. Please carefully follow the steps below to help review your changes.
+
+1. If you made any changes to your code after running the reproduction script, please run the reproduction script again.
+  If the reproduction script is failing, please revisit your changes and make sure they are correct.
+  If you have already removed your reproduction script, please ignore this step.
+2. Remove your reproduction script (if you haven't done so already).
+3. If you have modified any TEST files, please revert them to the state they had before you started fixing the issue.
+  You can do this with `git checkout -- /path/to/test/file.py`. Use below <diff> to find the files you need to revert.
+4. Run the submit command again to confirm.
+
+Here is a list of all of your changes:
+
+<diff>
+diff --git a/django/forms/fields.py b/django/forms/fields.py
+index 9de2c60b35..17c7956b53 100644
+--- a/django/forms/fields.py
++++ b/django/forms/fields.py
+@@ -1258,7 +1258,7 @@ class JSONField(CharField):
+     def prepare_value(self, value):
+         if isinstance(value, InvalidJSONInput):
+             return value
+-        return json.dumps(value, cls=self.encoder)
++        return json.dumps(value, ensure_ascii=False, cls=self.encoder)
+ 
+     def has_changed(self, initial, data):
+         if super().has_changed(initial, data):
+diff --git a/reproduce_issue.py b/reproduce_issue.py
+new file mode 100644
+index 0000000000..ce9cdc2eca
+--- /dev/null
++++ b/reproduce_issue.py
+@@ -0,0 +1,49 @@
++"""
++Script to reproduce the issue where JSONField doesn't display unicode chars properly.
++"""
++import json
++import sys
++import os
++
++# Add the testbed to the path
++sys.path.insert(0, '/testbed')
++
++# Setup Django
++os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tests.test_sqlite')
++
++import django
++django.setup()
++
++from django.forms import JSONField
++
++# Test with Chinese characters
++field = JSONField()
++
++# Test data with Chinese characters
++chinese_data = {'name': '中国', 'city': '北京'}
++
++# prepare_value is what's used to display the value in the admin form
++prepared = field.prepare_value(chinese_data)
++print(f"prepare_value result: {prepared}")
++print(f"Expected: {json.dumps(chinese_data, ensure_ascii=False)}")
++print(f"Are they equal? {prepared == json.dumps(chinese_data, ensure_ascii=False)}")
++print()
++
++# Check if Chinese characters are escaped
++if '\\u' in prepared:
++    print("BUG: Chinese characters are being escaped to ASCII!")
++    print(f"Got: {prepared}")
++    print(f"Expected: {json.dumps(chinese_data, ensure_ascii=False)}")
++else:
++    print("OK: Chinese characters are displayed properly")
++
++print()
++
++# Test with a simple string
++string_data = '中国'
++prepared_string = field.prepare_value(string_data)
++print(f"prepare_value for string '中国': {prepared_string}")
++if '\\u' in prepared_string:
++    print("BUG: Chinese characters in string are being escaped to ASCII!")
++else:
++    print("OK: Chinese characters in string are displayed properly")
+diff --git a/test_edge_cases.py b/test_edge_cases.py
+new file mode 100644
+index 0000000000..df25dc428c
+--- /dev/null
++++ b/test_edge_cases.py
+@@ -0,0 +1,101 @@
++"""
++Test edge cases for the JSONField unicode fix.
++"""
++import json
++import sys
++import os
++
++sys.path.insert(0, '/testbed')
++os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tests.test_sqlite')
++
++import django
++django.setup()
++
++from django.forms import JSONField
++from django.forms.fields import InvalidJSONInput
++
++field = JSONField()
++
++print("=== Edge Case Tests ===\n")
++
++# Test 1: Chinese characters in dict
++chinese_dict = {'name': '中国', 'city': '北京'}
++result = field.prepare_value(chinese_dict)
++print(f"Test 1 - Chinese dict: {result}")
++assert '\\u' not in result, f"FAIL: Got escaped unicode: {result}"
++print("PASS\n")
++
++# Test 2: Chinese characters in list
++chinese_list = ['中国', '北京', '上海']
++result = field.prepare_value(chinese_list)
++print(f"Test 2 - Chinese list: {result}")
++assert '\\u' not in result, f"FAIL: Got escaped unicode: {result}"
++print("PASS\n")
++
++# Test 3: Chinese characters as string
++chinese_str = '中国'
++result = field.prepare_value(chinese_str)
++print(f"Test 3 - Chinese string: {result}")
++assert '\\u' not in result, f"FAIL: Got escaped unicode: {result}"
++print("PASS\n")
++
++# Test 4: Mixed ASCII and unicode
++mixed = {'english': 'hello', 'chinese': '你好', 'number': 42}
++result = field.prepare_value(mixed)
++print(f"Test 4 - Mixed: {result}")
++assert '\\u' not in result, f"FAIL: Got escaped unicode: {result}"
++print("PASS\n")
++
++# Test 5: InvalidJSONInput should be returned as-is
++invalid = InvalidJSONInput('invalid json')
++result = field.prepare_value(invalid)
++print(f"Test 5 - InvalidJSONInput: {result}")
++assert result is invalid, "FAIL: InvalidJSONInput should be returned as-is"
++print("PASS\n")
++
++# Test 6: None value
++result = field.prepare_value(None)
++print(f"Test 6 - None: {result}")
++assert result == 'null', f"FAIL: Expected 'null', got {result}"
++print("PASS\n")
++
++# Test 7: Regular ASCII dict (should still work)
++ascii_dict = {'a': 'b', 'c': 1}
++result = field.prepare_value(ascii_dict)
++print(f"Test 7 - ASCII dict: {result}")
++assert result == '{"a": "b", "c": 1}', f"FAIL: Got {result}"
++print("PASS\n")
++
++# Test 8: Japanese characters
++japanese = {'greeting': 'こんにちは'}
++result = field.prepare_value(japanese)
++print(f"Test 8 - Japanese: {result}")
++assert '\\u' not in result, f"FAIL: Got escaped unicode: {result}"
++print("PASS\n")
++
++# Test 9: Arabic characters
++arabic = {'text': 'مرحبا'}
++result = field.prepare_value(arabic)
++print(f"Test 9 - Arabic: {result}")
++assert '\\u' not in result, f"FAIL: Got escaped unicode: {result}"
++print("PASS\n")
++
++# Test 10: has_changed still works correctly with unicode
++field2 = JSONField()
++# Same data, different representation
++initial = {'name': '中国'}
++data = '{"name": "中国"}'
++changed = field2.has_changed(initial, data)
++print(f"Test 10 - has_changed with same unicode data: {changed}")
++assert changed == False, f"FAIL: has_changed should return False for same data, got {changed}"
++print("PASS\n")
++
++# Test 11: has_changed detects actual changes
++initial = {'name': '中国'}
++data = '{"name": "日本"}'
++changed = field2.has_changed(initial, data)
++print(f"Test 11 - has_changed with different unicode data: {changed}")
++assert changed == True, f"FAIL: has_changed should return True for different data, got {changed}"
++print("PASS\n")
++
++print("=== All edge case tests passed! ===")
+
+</diff>
+
+
+2026-09-12 10:36:13,086 - INFO - swea-agent - ========================= STEP 32 =========================
+2026-09-12 10:36:15,382 - INFO - swea-agent - 💭 THOUGHT
+I need to remove the reproduction scripts before submitting.
+
+🎬 ACTION
+rm /testbed/reproduce_issue.py /testbed/test_edge_cases.py
+2026-09-12 10:36:15,867 - INFO - swea-agent - 🤖 MODEL INPUT
+Your command ran successfully and did not produce any output.
+2026-09-12 10:36:15,914 - INFO - swea-agent - ========================= STEP 33 =========================
+2026-09-12 10:36:17,370 - INFO - swea-agent - 💭 THOUGHT
+
+
+🎬 ACTION
+submit
+2026-09-12 10:36:18,084 - INFO - swea-agent - Found submission: diff --git a/django/forms/fields.py b/django/forms/fields.py
+index 9de2c60b35..17c7956b53 100644
+--- a/django/forms/fields.py
++++ b/django/forms/fields.py
+@@ -1258,7 +1258,7 @@ class JSONField(CharField):
+     def prepare_value(self, value):
+         if isinstance(value, InvalidJSONInput):
+             return value
+-        return json.dumps(value, cls=self.encoder)
++        return json.dumps(value, ensure_ascii=False, cls=self.encoder)
+ 
+     def has_changed(self, initial, data):
+         if super().has_changed(initial, data):
+
+2026-09-12 10:36:18,087 - INFO - swea-agent - 🤖 MODEL INPUT
+OBSERVATION:
+diff --git a/django/forms/fields.py b/django/forms/fields.py
+index 9de2c60b35..17c7956b53 100644
+--- a/django/forms/fields.py
++++ b/django/forms/fields.py
+@@ -1258,7 +1258,7 @@ class JSONField(CharField):
+     def prepare_value(self, value):
+         if isinstance(value, InvalidJSONInput):
+             return value
+-        return json.dumps(value, cls=self.encoder)
++        return json.dumps(value, ensure_ascii=False, cls=self.encoder)
+ 
+     def has_changed(self, initial, data):
+         if super().has_changed(initial, data):
+
+2026-09-12 10:36:18,133 - INFO - swea-agent - Trajectory saved to /Users/amir/Downloads/meta_agent_pilot/results/swe_agent_baseline/django__django-13512/django__django-13512.traj
+2026-09-12 10:36:18,145 - INFO - swea-env - Beginning environment shutdown...

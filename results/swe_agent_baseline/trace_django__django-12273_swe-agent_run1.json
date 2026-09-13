@@ -1,0 +1,11 @@
+{
+  "instance_id": "django__django-12273",
+  "harness": "swe-agent",
+  "model": "claude-sonnet-4-6",
+  "run_index": 1,
+  "status": "infra_incomplete",
+  "note": "Excluded from the comparison, same as django__django-14238 was excluded from this project's own real-task pilot: SWE-agent hung 3 separate times on this instance (non-streaming litellm call, no response/error/retry logged for minutes), each time deeper into a growing context (steps ~50, ~50, ~69), costing $1.4-1.7 per failed attempt with no completion. This is an infrastructure limitation of SWE-agent's default (non-streaming) API call under this project's network conditions, not a result about SWE-agent's reasoning or verification behavior on this task.",
+  "attempts": 3,
+  "estimated_cost_usd_wasted": 3.77,
+  "last_partial_diff_note": "First contaminated attempt (separate from the 3 hangs) autosubmitted debug-only scripts with no real fix after an earlier, unrelated credit-balance outage; not used in this result."
+}

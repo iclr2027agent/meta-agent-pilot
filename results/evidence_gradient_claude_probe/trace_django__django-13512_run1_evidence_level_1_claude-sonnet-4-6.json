@@ -1,0 +1,15 @@
+{
+  "instance_id": "django__django-13512",
+  "run_index": 1,
+  "condition": "evidence_level_1",
+  "model": "claude-sonnet-4-6",
+  "problem_statement": "Admin doesn't display properly unicode chars in JSONFields.\nDescription\n\t \n\t\t(last modified by ZhaoQi99)\n\t \n>>> import json\n>>> print json.dumps('\u4e2d\u56fd')\n\"\\u4e2d\\u56fd\"\njson.dumps use ASCII encoding by default when serializing Chinese.\nSo when we edit a JsonField which contains Chinese character in Django admin,it will appear in ASCII characters.\nI have try to fix this this problem in \u200bhttps://github.com/adamchainz/django-mysql/pull/714.And it works prefectly.\n",
+  "diff": "diff --git a/django/forms/fields.py b/django/forms/fields.py\nindex 9de2c60b35..17c7956b53 100644\n--- a/django/forms/fields.py\n+++ b/django/forms/fields.py\n@@ -1258,7 +1258,7 @@ class JSONField(CharField):\n     def prepare_value(self, value):\n         if isinstance(value, InvalidJSONInput):\n             return value\n-        return json.dumps(value, cls=self.encoder)\n+        return json.dumps(value, ensure_ascii=False, cls=self.encoder)\n \n     def has_changed(self, initial, data):\n         if super().has_changed(initial, data):\n",
+  "evidence_shown": "The test suite reported: FAILURE (failures=1, Ran 35 tests)",
+  "claimed_success": false,
+  "reviewer_reasoning": "The diff correctly addresses the ticket by adding `ensure_ascii=False` to `json.dumps` in the `prepare_value` method of `JSONField`, which will display Unicode characters (like Chinese characters) properly instead of ASCII-escaped sequences. However, the test evidence shows that the test suite reported a FAILURE with 1 failure out of 35 tests run. This indicates that while the fix may be logically correct, it is either breaking an existing test or the new test added to verify the fix is failing. The change cannot be considered fully and correctly resolved when there is a test failure.",
+  "ground_truth_incomplete": true,
+  "correct": true,
+  "wall_clock_seconds": 8.0,
+  "estimated_cost_usd": 0.0034
+}

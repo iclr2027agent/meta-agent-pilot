@@ -1,0 +1,26 @@
+{
+  "instance_id": "django__django-14140",
+  "harness": "swe-agent",
+  "model": "claude-sonnet-4-6",
+  "run_index": 1,
+  "final_diff": "diff --git a/django/db/models/query_utils.py b/django/db/models/query_utils.py\nindex ae0f886107..5f60ee4079 100644\n--- a/django/db/models/query_utils.py\n+++ b/django/db/models/query_utils.py\n@@ -87,7 +87,10 @@ class Q(tree.Node):\n         args, kwargs = (), {}\n         if len(self.children) == 1 and not isinstance(self.children[0], Q):\n             child = self.children[0]\n-            kwargs = {child[0]: child[1]}\n+            if isinstance(child, tuple) and len(child) == 2:\n+                kwargs = {child[0]: child[1]}\n+            else:\n+                args = tuple(self.children)\n         else:\n             args = tuple(self.children)\n             if self.connector != self.default:\n",
+  "fail_to_pass_passed": false,
+  "pass_to_pass_passed": true,
+  "resolved": false,
+  "fail_to_pass_detail": {
+    "success": [
+      "test_deconstruct_boolean_expression (queries.test_q.QTests)",
+      "test_boolean_expression_combined_with_empty_Q (expressions.tests.BasicExpressionsTests)"
+    ],
+    "failure": [
+      "test_deconstruct (queries.test_q.QTests)",
+      "test_deconstruct_negated (queries.test_q.QTests)"
+    ]
+  },
+  "total_turns": 34,
+  "self_correction_observed": true,
+  "self_correction_detail": "Ran the existing Q/expressions test suites multiple times, ending with 'All 796 tests pass' and high confidence. However, SWE-bench's held-out test additions (test_deconstruct/test_deconstruct_negated's new assertions) are not present in the agent's local checkout - they are only added by the harness's test_patch at grading time - so the agent's extensive local testing was structurally unable to see the specific cases it still fails on.",
+  "estimated_cost_usd": 0.3664,
+  "total_tokens_sent": 434564,
+  "total_tokens_received": 1014
+}

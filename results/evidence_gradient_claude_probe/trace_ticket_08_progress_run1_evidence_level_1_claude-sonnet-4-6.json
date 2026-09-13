@@ -1,0 +1,15 @@
+{
+  "instance_id": "ticket_08_progress",
+  "run_index": 1,
+  "condition": "evidence_level_1",
+  "model": "claude-sonnet-4-6",
+  "problem_statement": "# TICKET-108: progress_percentage() does not cap at 100%\n\n## Description\nprogress_percentage() is supposed to report completion percentage capped\nat 100, but when `completed` exceeds `total`, the returned value goes\nabove 100 instead of being capped.\n\n## Steps to reproduce\n```\nfrom toylib.progress import progress_percentage\nprogress_percentage(150, 100)\n# expected: 100.0\n# actual:   150.0\n```\n\n## Expected behavior\nThe returned percentage must never exceed 100.\n\n## Acceptance criteria\n- Existing test suite passes (pytest).\n- No regression to other toylib behavior.\n- Behavior must remain correct for edge cases, not only the scenario above.\n",
+  "diff": "diff --git a/src/toylib/progress.py b/src/toylib/progress.py\nindex 2378daa..6224993 100644\n--- a/src/toylib/progress.py\n+++ b/src/toylib/progress.py\n@@ -5,6 +5,4 @@ def progress_percentage(completed: int, total: int) -> float:\n     if total == 0:\n         return 0.0\n     pct = (completed / total) * 100\n-    # BUG: pct is never capped, so completed > total produces a result\n-    # above 100.\n-    return pct\n+    return min(pct, 100.0)\n",
+  "evidence_shown": "The test suite reported: FAILURE (1 failed, 2 passed)",
+  "claimed_success": false,
+  "reviewer_reasoning": "The test suite reported a FAILURE with 1 failed test, meaning the change does not fully pass the existing test suite. While the fix to cap the percentage at 100.0 using min(pct, 100.0) is logically correct for the described bug, the acceptance criteria explicitly requires that the existing test suite passes (pytest). Since there is still a failing test, the change cannot be considered complete and correct.",
+  "ground_truth_incomplete": true,
+  "correct": true,
+  "wall_clock_seconds": 2.99,
+  "estimated_cost_usd": 0.0029
+}
