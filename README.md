@@ -23,6 +23,45 @@ for the full breakdown. This doesn't overturn the core claim — reasoning
 still fell short of execution evidence's 100% — but it means "reasoning
 alone can't catch it" needs the qualifier "under a neutral prompt."
 
+A ninth experiment complicates the SWE-agent-baseline comparison
+specifically: that comparison originally let our harness's
+`execution_aware_judgment` see the real, held-out test assertions
+SWE-bench uses for grading, while SWE-agent — working from a plain local
+checkout — structurally couldn't. Re-running the judge (same 3 diffs, same
+problem statements, no new Step A/B work) with that held-out signal
+withheld — leaving only what a local `git diff` + locally-runnable
+regression tests would show — drops its catch rate on those 3 diffs from
+3/3 to 1/3, identical to plain `self_verification`'s 1/3 on the same diffs.
+The two false-accepts reason the same way SWE-agent's own self-testing did
+when it missed the same instances: a clean local regression run read as
+confirmation of a fix that a file it never touched (or an assertion it
+never saw) still failed. See
+`results/swe_agent_baseline_visibility_matched/report.md` for the full
+breakdown. This means the SWE-agent-baseline comparison shouldn't be read
+as "the control-plane architecture beats SWE-agent" without a visibility
+qualifier: under matched blindness to the held-out assertions, the
+architectural difference contributes nothing measurable on this sample —
+it's the held-out execution evidence itself doing the work, not the
+architecture independent of what evidence it's given.
+
+A tenth experiment revisits the evidence-quality gradient's claim that the
+dip's *location* (Level 2 for GPT-5, Level 3 for Claude) is model-dependent
+rather than the same phenomenon landing at different levels by chance —
+previously argued by eyeballing two separate tables' confidence intervals,
+not by a real test. Pooling every replicate trial for both models (147
+trials across 13 underlying tasks, adding fresh Level 1-4 replication on
+Claude's two real-repo tasks to match GPT-5's existing 3-per-level design)
+and testing the level×model interaction directly: a mixed-effects logistic
+fit is directionally consistent with the claim (GPT-5 relatively worse at
+Level 2, relatively better at Level 3 — the opposite of Claude's pattern),
+but a permutation test on the same interaction is not significant at
+conventional thresholds (p ≈ 0.06-0.07 across two reasonable test
+statistics). See `results/evidence_gradient_pooled_reanalysis_report.md`
+for the full analysis and the exact rewrite this implies for the paper's
+Section 9: the dip's *existence* in both models is solid (every replicated
+cell shows it); its *location* being model-dependent is suggestive, not
+established, at this sample size.
+
 ## Layout
 
 - `toy_repo/` — a small `toylib` package with 16 independent seeded bugs,
@@ -54,7 +93,10 @@ alone can't catch it" needs the qualifier "under a neutral prompt."
   (the upstream clone) and `venv/` are gitignored (reproducible via
   `git clone` + `pip install -e .`); the one file we actually authored
   (`anthropic_top_p_fix.yaml`, a config override for a Claude/litellm
-  incompatibility) is tracked.
+  incompatibility) is tracked. `results/swe_agent_baseline_visibility_matched/`
+  is the follow-up correction re-judging the same diffs under SWE-agent's
+  own (blinder) evidence visibility — see the ninth-experiment paragraph
+  above and that directory's `report.md`.
 - `results/` — every experiment's output (trace JSON, `.traj` files,
   `report.json`, raw test output, selection/results write-ups). Tracked.
 - `logs/` — harness run logs. **Gitignored** — regenerate by re-running the
@@ -118,6 +160,13 @@ alone can't catch it" needs the qualifier "under a neutral prompt."
   output), or whether it's a cliff between "nothing" and "everything."
   `evidence_gradient_probe_claude.py` is the same construction run with
   Claude as reviewer instead of GPT-5.
+- `swe_agent_baseline/` — `visibility_matched_probe.py` re-runs
+  `execution_aware_judgment` on the 3 real-task pilot diffs shared with the
+  SWE-agent-baseline comparison, replacing the real (held-out-assertion-
+  leaking) test output with a synthetic local-test-runner transcript
+  containing only the `PASS_TO_PASS` regression result — matching the
+  visibility SWE-agent actually had. No new diffs, no Docker re-run, only
+  the reviewer's input changes.
 
 Each probe script pulls its diffs/problem statements from already-existing
 traces wherever possible (see each script's own docstring) rather than
@@ -171,3 +220,41 @@ cross-model, evidence-gradient, SWE-agent-baseline, cross-model-review,
 adversarial-review, and multi-repo-expansion experiments each add a
 different, independent line of evidence for the core claim rather than
 substituting for a larger-N synthetic study.
+
+D as reported (`appropriate_delegations / delegations`) is 1.00 across
+every condition because it only asks whether a delegation was well-formed —
+a parseable plan, a non-empty diff — not whether the resulting fix was ever
+verified correct. `score_dprime.py` re-scores the same trace files against
+the ground-truth pass/fail signal already recorded per attempt
+(`verified_success`, or the run-blind `shadow_verified_success` /
+`actual_test_result` the ablation conditions log without showing the
+worker) into a verification-weighted D' (0.5 credit for a well-formed but
+wrong attempt that a later attempt in the same run fixed, 0 credit if it
+never got fixed) and a U' that flags a same-plan repair (real plan
+identity, tracked from the "plan"/"replan" step log, not inferred from
+diff similarity) that follows an already-failed attempt and still fails.
+D' diverges materially from D=1.00: 0.83 on the main pilot, down to 0.50 on
+the trust_claims/self_verify/independent_review ablations and 0.00 on the
+execution_aware_self_judge and escalation probes (both single-attempt by
+design).
+
+U' stays 0.00 everywhere, but that's only a meaningful check where a
+same-plan repair is structurally possible: the default `replan_threshold=1`
+always re-plans before the next attempt, so most of the runs above give U'
+zero *opportunities* to fire. The one condition that does allow it —
+`replan_threshold=2` (attempt 1 reuses attempt 0's plan verbatim after real
+failure feedback) — was run on 4 tickets × 3 runs = 12 runs; all 12
+same-plan repairs resolved the ticket on the next attempt, giving 12 real
+resubmission opportunities and 0 U' hits. So U'=0.00 there is a tested
+negative result (the "wasted repair" failure mode wasn't observed in 12
+opportunities), not an artifact of the condition being unable to produce
+it. Full table and methodology: `results/dprime/summary_table.md`.
+
+Each of the four ablation conditions above (`trust_claims`, `self_verify`,
+`execution_aware_self_judge`, `independent_review`) was run on all four
+recovery tickets (07/08/13/15), 12 runs each — three of them split across
+two directories (`results/<condition>_probe/` for tickets 07/08 plus the
+matching condition inside `results/extended_ablation_probe/` for tickets
+13/15), which is easy to undercount by scoring only the dedicated
+directory. See "Run-count correction" in `results/dprime/summary_table.md`
+for how that was checked.

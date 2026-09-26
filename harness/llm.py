@@ -101,11 +101,16 @@ def _get_client() -> anthropic.Anthropic:
 
 
 def reset_client() -> None:
-    """Force the next _get_client() call to build a fresh client (fresh
-    connection pool). Used when retrying after a transient network error,
-    in case the pooled connection itself is left in a bad state."""
-    global _client
+    """Force the next _get_client()/_get_openai_client() call to build a
+    fresh client (fresh connection pool). Used when retrying after a
+    transient network error, in case the pooled connection itself is left
+    in a bad state. Resets both providers' clients unconditionally since
+    callers retrying a transient error don't necessarily know which
+    provider the failing call used (e.g. a shared retry wrapper used for
+    both Anthropic and OpenAI calls) — clearing an unused client is free."""
+    global _client, _openai_client
     _client = None
+    _openai_client = None
 
 
 _openai_client = None

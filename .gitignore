@@ -10,6 +10,7 @@ swe_agent_baseline/SWE-agent/
 swe_agent_baseline/venv/
 swebench_pilot/django_repo/
 swebench_expansion/repos/
+wp2_sample/repos/
 
 # OS / editor
 .DS_Store
@@ -21,7 +22,9 @@ swebench_expansion/repos/
 /logs/
 swebench_pilot/logs/
 swebench_expansion/logs/
+wp2_sample/logs/
 swebench_expansion/smoke_test/
 swebench_expansion/full_run.log
 
 .env.swebench_expansion
+.env.local
